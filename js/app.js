@@ -48,9 +48,87 @@
 
 	$ = __webpack_require__(1);
 
-	window.initialized = true;
-
-	$("body").append("...jq loaded");
+	window.hangboardTimer = {
+	  hangTime: 10000,
+	  restTime: 5000,
+	  reps: 6,
+	  states: {
+	    stopped: "stopped",
+	    hang: "hang",
+	    rest: "rest"
+	  },
+	  intervalTime: 50,
+	  startTimestamp: null,
+	  currentRep: null,
+	  currentState: null,
+	  init: function() {
+	    this.currentState = this.states.stopped;
+	    this.dom = {};
+	    this.dom.time = $("#time");
+	    this.dom.state = $("#state");
+	    this.dom.state.text(this.currentState);
+	    return $("#start").click((function(_this) {
+	      return function() {
+	        return _this.start();
+	      };
+	    })(this));
+	  },
+	  start: function() {
+	    console.log('starting');
+	    this.startTimestamp = Date.now();
+	    this.currentState = this.getNextState();
+	    return this.interval = setInterval((function(_this) {
+	      return function() {
+	        return _this.update();
+	      };
+	    })(this), this.intervalTime);
+	  },
+	  stop: function() {
+	    this.startTimestamp = null;
+	    this.currentRep = null;
+	    this.currentState = this.getNextState();
+	    if (this.interval != null) {
+	      return clearInterval(this.interval);
+	    }
+	  },
+	  update: function() {
+	    var elaspedTime, formattedTime, now;
+	    now = Date.now();
+	    elaspedTime = now - this.startTimestamp;
+	    formattedTime = this.formatCountdown(elaspedTime, this.restTime);
+	    this.dom.time.text(formattedTime);
+	    this.dom.state.text(this.currentState);
+	    if (elaspedTime > this.restTime) {
+	      console.log('at end');
+	      return this.stop();
+	    }
+	  },
+	  getNextState: function() {
+	    if (this.currentState === this.states.stopped) {
+	      return this.states.rest;
+	    }
+	    if (this.currentState === this.states.rest) {
+	      return this.states.hang;
+	    } else if (this.currentState === this.states.hang && this.currentRep < this.reps) {
+	      return this.states.rest;
+	    } else {
+	      return this.states.stop;
+	    }
+	  },
+	  formatCountdown: function(current, goal) {
+	    var remaining;
+	    remaining = goal - current;
+	    if (remaining < 0) {
+	      remaining = 0;
+	    }
+	    remaining = "" + (remaining / 1000);
+	    if (remaining.indexOf(".") < 0) {
+	      remaining = remaining + ".000";
+	    }
+	    remaining = remaining.split(".").join(":");
+	    return remaining;
+	  }
+	};
 
 
 /***/ },

@@ -1,7 +1,7 @@
 {
   "name": "hangboard-timer",
   "version": "1.0.0",
-  "description": "A simple JavaScript-based time app to use for climbing training",
+  "description": "A simple JavaScript-based timer app to use for climbing training",
   "main": "gulpfile.js",
   "scripts": {
     "test": "gulp"

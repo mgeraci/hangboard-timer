@@ -1,0 +1,1 @@
+window.initialized = true

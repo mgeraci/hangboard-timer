@@ -2,9 +2,11 @@ $ = require("jquery")
 
 window.hangboardTimer = {
 	# defaults for constants
-	hangTime: 10000
-	restTime: 5000
-	reps: 6
+	reps: 2
+	times: {
+		hang: 4000
+		rest: 2000
+	}
 
 	states: {
 		stopped: "stopped"
@@ -26,16 +28,23 @@ window.hangboardTimer = {
 		@dom = {}
 		@dom.time = $("#time")
 		@dom.state = $("#state")
+		@dom.rep = $("#rep")
 		@dom.state.text(@currentState)
 
 		$("#start").click(=>
 			@start()
 		)
 
+		$("#stop").click(=>
+			@stop()
+		)
+
 	start: ->
 		console.log 'starting'
 		@startTimestamp = Date.now()
 		@currentState = @getNextState()
+		@dom.rep.text("get ready...")
+		@currentRep = 0
 
 		@interval = setInterval(=>
 			@update()
@@ -44,7 +53,9 @@ window.hangboardTimer = {
 	stop: ->
 		@startTimestamp = null
 		@currentRep = null
-		@currentState = @getNextState()
+		@currentState = @states.stopped
+		@dom.rep.text("")
+		@dom.state.text(@states.stopped)
 
 		if @interval?
 			clearInterval(@interval)
@@ -52,16 +63,33 @@ window.hangboardTimer = {
 	update: ->
 		now = Date.now()
 		elaspedTime = now - @startTimestamp
-		formattedTime = @formatCountdown(elaspedTime, @restTime)
+		stateDuration = @times[@currentState]
+		formattedTime = @formatCountdown(elaspedTime, stateDuration)
 
 		@dom.time.text(formattedTime)
 		@dom.state.text(@currentState)
 
-		if elaspedTime > @restTime
-			console.log 'at end'
-			@stop()
+		if @currentRep? && @currentRep > 0
+			@dom.rep.text("rep #{@currentRep}/#{@reps}")
+
+		if elaspedTime > stateDuration
+			nextState = @getNextState()
+			console.log 'next state:', nextState
+
+			# short circuit if we hit the end state
+			if nextState == @states.stopped
+				@stop()
+				return
+
+			@startTimestamp = now
+			@currentState = nextState
+
+			# if we're starting a new rep, increment the current rep count
+			if nextState == @states.hang
+				@currentRep++
 
 	getNextState: ->
+		console.log "getNextState", @currentRep, @reps
 		if @currentState == @states.stopped
 			return @states.rest
 		if @currentState == @states.rest
@@ -69,7 +97,7 @@ window.hangboardTimer = {
 		else if @currentState == @states.hang && @currentRep < @reps
 			return @states.rest
 		else
-			return @states.stop
+			return @states.stopped
 
 	formatCountdown: (current, goal) ->
 		remaining = goal - current

@@ -49,9 +49,11 @@
 	$ = __webpack_require__(1);
 
 	window.hangboardTimer = {
-	  hangTime: 10000,
-	  restTime: 5000,
-	  reps: 6,
+	  reps: 2,
+	  times: {
+	    hang: 4000,
+	    rest: 2000
+	  },
 	  states: {
 	    stopped: "stopped",
 	    hang: "hang",
@@ -66,10 +68,16 @@
 	    this.dom = {};
 	    this.dom.time = $("#time");
 	    this.dom.state = $("#state");
+	    this.dom.rep = $("#rep");
 	    this.dom.state.text(this.currentState);
-	    return $("#start").click((function(_this) {
+	    $("#start").click((function(_this) {
 	      return function() {
 	        return _this.start();
+	      };
+	    })(this));
+	    return $("#stop").click((function(_this) {
+	      return function() {
+	        return _this.stop();
 	      };
 	    })(this));
 	  },
@@ -77,6 +85,8 @@
 	    console.log('starting');
 	    this.startTimestamp = Date.now();
 	    this.currentState = this.getNextState();
+	    this.dom.rep.text("get ready...");
+	    this.currentRep = 0;
 	    return this.interval = setInterval((function(_this) {
 	      return function() {
 	        return _this.update();
@@ -86,24 +96,40 @@
 	  stop: function() {
 	    this.startTimestamp = null;
 	    this.currentRep = null;
-	    this.currentState = this.getNextState();
+	    this.currentState = this.states.stopped;
+	    this.dom.rep.text("");
+	    this.dom.state.text(this.states.stopped);
 	    if (this.interval != null) {
 	      return clearInterval(this.interval);
 	    }
 	  },
 	  update: function() {
-	    var elaspedTime, formattedTime, now;
+	    var elaspedTime, formattedTime, nextState, now, stateDuration;
 	    now = Date.now();
 	    elaspedTime = now - this.startTimestamp;
-	    formattedTime = this.formatCountdown(elaspedTime, this.restTime);
+	    stateDuration = this.times[this.currentState];
+	    formattedTime = this.formatCountdown(elaspedTime, stateDuration);
 	    this.dom.time.text(formattedTime);
 	    this.dom.state.text(this.currentState);
-	    if (elaspedTime > this.restTime) {
-	      console.log('at end');
-	      return this.stop();
+	    if ((this.currentRep != null) && this.currentRep > 0) {
+	      this.dom.rep.text("rep " + this.currentRep + "/" + this.reps);
+	    }
+	    if (elaspedTime > stateDuration) {
+	      nextState = this.getNextState();
+	      console.log('next state:', nextState);
+	      if (nextState === this.states.stopped) {
+	        this.stop();
+	        return;
+	      }
+	      this.startTimestamp = now;
+	      this.currentState = nextState;
+	      if (nextState === this.states.hang) {
+	        return this.currentRep++;
+	      }
 	    }
 	  },
 	  getNextState: function() {
+	    console.log("getNextState", this.currentRep, this.reps);
 	    if (this.currentState === this.states.stopped) {
 	      return this.states.rest;
 	    }
@@ -112,7 +138,7 @@
 	    } else if (this.currentState === this.states.hang && this.currentRep < this.reps) {
 	      return this.states.rest;
 	    } else {
-	      return this.states.stop;
+	      return this.states.stopped;
 	    }
 	  },
 	  formatCountdown: function(current, goal) {

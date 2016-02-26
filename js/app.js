@@ -54,9 +54,11 @@
 	  reps: 2,
 	  times: {
 	    hang: 4000,
-	    rest: 2000
+	    rest: 2000,
+	    get_ready: 5000
 	  },
 	  states: {
+	    get_ready: "get_ready",
 	    stopped: "stopped",
 	    hang: "hang",
 	    rest: "rest"
@@ -130,7 +132,10 @@
 	  getNextState: function() {
 	    console.log("getNextState", this.currentRep, this.reps);
 	    if (this.currentState === this.states.stopped) {
-	      return this.states.rest;
+	      return this.states.get_ready;
+	    }
+	    if (this.currentState === this.states.get_ready) {
+	      return this.states.hang;
 	    }
 	    if (this.currentState === this.states.rest) {
 	      return this.states.hang;
@@ -9990,7 +9995,6 @@
 
 	Card = Card = (function() {
 	  function Card(timestamp, state) {
-	    console.log('card constructor');
 	    this.id = timestamp;
 	    this.el = $(this.template());
 	    $("body").append(this.el);

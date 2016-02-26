@@ -2,7 +2,6 @@ $ = require("jquery")
 
 Card = class Card
 	constructor: (timestamp, state) ->
-		console.log 'card constructor'
 		@id = timestamp
 
 		@el = $(@template())

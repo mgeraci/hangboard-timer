@@ -7,9 +7,11 @@ window.hangboardTimer = {
 	times: {
 		hang: 4000
 		rest: 2000
+		get_ready: 5000
 	}
 
 	states: {
+		get_ready: "get_ready"
 		stopped: "stopped"
 		hang: "hang"
 		rest: "rest"
@@ -88,7 +90,9 @@ window.hangboardTimer = {
 	getNextState: ->
 		console.log "getNextState", @currentRep, @reps
 		if @currentState == @states.stopped
-			return @states.rest
+			return @states.get_ready
+		if @currentState == @states.get_ready
+			return @states.hang
 		if @currentState == @states.rest
 			return @states.hang
 		else if @currentState == @states.hang && @currentRep < @reps

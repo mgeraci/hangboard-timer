@@ -44,9 +44,11 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var $;
+	var $, Card;
 
 	$ = __webpack_require__(1);
+
+	Card = __webpack_require__(2);
 
 	window.hangboardTimer = {
 	  reps: 2,
@@ -65,11 +67,6 @@
 	  currentState: null,
 	  init: function() {
 	    this.currentState = this.states.stopped;
-	    this.dom = {};
-	    this.dom.time = $("#time");
-	    this.dom.state = $("#state");
-	    this.dom.rep = $("#rep");
-	    this.dom.state.text(this.currentState);
 	    $("#start").click((function(_this) {
 	      return function() {
 	        return _this.start();
@@ -84,8 +81,8 @@
 	  start: function() {
 	    console.log('starting');
 	    this.startTimestamp = Date.now();
+	    this.card = new Card();
 	    this.currentState = this.getNextState();
-	    this.dom.rep.text("get ready...");
 	    this.currentRep = 0;
 	    return this.interval = setInterval((function(_this) {
 	      return function() {
@@ -97,23 +94,25 @@
 	    this.startTimestamp = null;
 	    this.currentRep = null;
 	    this.currentState = this.states.stopped;
-	    this.dom.rep.text("");
-	    this.dom.state.text(this.states.stopped);
+	    this.card.destroy();
 	    if (this.interval != null) {
 	      return clearInterval(this.interval);
 	    }
 	  },
 	  update: function() {
-	    var elaspedTime, formattedTime, nextState, now, stateDuration;
+	    var elaspedTime, nextState, now, rep, stateDuration;
 	    now = Date.now();
 	    elaspedTime = now - this.startTimestamp;
 	    stateDuration = this.times[this.currentState];
-	    formattedTime = this.formatCountdown(elaspedTime, stateDuration);
-	    this.dom.time.text(formattedTime);
-	    this.dom.state.text(this.currentState);
 	    if ((this.currentRep != null) && this.currentRep > 0) {
-	      this.dom.rep.text("rep " + this.currentRep + "/" + this.reps);
+	      rep = "rep " + this.currentRep + "/" + this.reps;
 	    }
+	    this.card.update({
+	      time: elaspedTime,
+	      timeGoal: stateDuration,
+	      status: this.currentState,
+	      rep: rep
+	    });
 	    if (elaspedTime > stateDuration) {
 	      nextState = this.getNextState();
 	      console.log('next state:', nextState);
@@ -140,19 +139,6 @@
 	    } else {
 	      return this.states.stopped;
 	    }
-	  },
-	  formatCountdown: function(current, goal) {
-	    var remaining;
-	    remaining = goal - current;
-	    if (remaining < 0) {
-	      remaining = 0;
-	    }
-	    remaining = "" + (remaining / 1000);
-	    if (remaining.indexOf(".") < 0) {
-	      remaining = remaining + ".000";
-	    }
-	    remaining = remaining.split(".").join(":");
-	    return remaining;
 	  }
 	};
 
@@ -9992,6 +9978,75 @@
 
 	return jQuery;
 	}));
+
+
+/***/ },
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var $, Card;
+
+	$ = __webpack_require__(1);
+
+	Card = Card = (function() {
+	  function Card(timestamp, state) {
+	    console.log('card constructor');
+	    this.id = timestamp;
+	    this.el = $(this.template());
+	    $("body").append(this.el);
+	    this.time = this.el.find(".card-time");
+	    this.status = this.el.find(".card-status");
+	    this.rep = this.el.find(".card-rep");
+	    if (state != null) {
+	      this.update(state);
+	    }
+	  }
+
+	  Card.prototype.update = function(nextState) {
+	    var ref, ref1, ref2, time;
+	    if (nextState == null) {
+	      return;
+	    }
+	    if (((ref = this.state) != null ? ref.time : void 0) !== nextState.time && nextState.timeGoal) {
+	      time = this.formatCountdown(nextState.time, nextState.timeGoal);
+	      this.time.text(time);
+	    }
+	    if (((ref1 = this.state) != null ? ref1.status : void 0) !== nextState.status) {
+	      this.status.text(nextState.status);
+	    }
+	    if (((ref2 = this.state) != null ? ref2.rep : void 0) !== nextState.rep) {
+	      this.rep.text(nextState.rep);
+	    }
+	    return this.state = nextState;
+	  };
+
+	  Card.prototype.destroy = function() {
+	    return this.el.remove();
+	  };
+
+	  Card.prototype.template = function() {
+	    return "<div id=\"card\" class=\"card\">\n	<span class=\"card-time\"></span>\n	<span class=\"card-status\"></span>\n	<span class=\"card-rep\"></span>\n</div>";
+	  };
+
+	  Card.prototype.formatCountdown = function(current, goal) {
+	    var remaining;
+	    remaining = goal - current;
+	    if (remaining < 0) {
+	      remaining = 0;
+	    }
+	    remaining = "" + (remaining / 1000);
+	    if (remaining.indexOf(".") < 0) {
+	      remaining = remaining + ".000";
+	    }
+	    remaining = remaining.split(".").join(":");
+	    return remaining;
+	  };
+
+	  return Card;
+
+	})();
+
+	module.exports = Card;
 
 
 /***/ }

@@ -1,4 +1,5 @@
 $ = require("jquery")
+Card = require("./card.coffee")
 
 window.hangboardTimer = {
 	# defaults for constants
@@ -25,12 +26,6 @@ window.hangboardTimer = {
 	init: ->
 		@currentState = @states.stopped
 
-		@dom = {}
-		@dom.time = $("#time")
-		@dom.state = $("#state")
-		@dom.rep = $("#rep")
-		@dom.state.text(@currentState)
-
 		$("#start").click(=>
 			@start()
 		)
@@ -42,8 +37,8 @@ window.hangboardTimer = {
 	start: ->
 		console.log 'starting'
 		@startTimestamp = Date.now()
+		@card = new Card()
 		@currentState = @getNextState()
-		@dom.rep.text("get ready...")
 		@currentRep = 0
 
 		@interval = setInterval(=>
@@ -54,8 +49,7 @@ window.hangboardTimer = {
 		@startTimestamp = null
 		@currentRep = null
 		@currentState = @states.stopped
-		@dom.rep.text("")
-		@dom.state.text(@states.stopped)
+		@card.destroy()
 
 		if @interval?
 			clearInterval(@interval)
@@ -64,13 +58,16 @@ window.hangboardTimer = {
 		now = Date.now()
 		elaspedTime = now - @startTimestamp
 		stateDuration = @times[@currentState]
-		formattedTime = @formatCountdown(elaspedTime, stateDuration)
-
-		@dom.time.text(formattedTime)
-		@dom.state.text(@currentState)
 
 		if @currentRep? && @currentRep > 0
-			@dom.rep.text("rep #{@currentRep}/#{@reps}")
+			rep = "rep #{@currentRep}/#{@reps}"
+
+		@card.update({
+			time: elaspedTime
+			timeGoal: stateDuration
+			status: @currentState
+			rep: rep
+		})
 
 		if elaspedTime > stateDuration
 			nextState = @getNextState()
@@ -98,21 +95,4 @@ window.hangboardTimer = {
 			return @states.rest
 		else
 			return @states.stopped
-
-	formatCountdown: (current, goal) ->
-		remaining = goal - current
-
-		# keep in bounds
-		if remaining < 0
-			remaining = 0
-
-		remaining = "#{remaining / 1000}"
-
-		# make zero counts look good by adding more zeros at the end
-		if remaining.indexOf(".") < 0
-			remaining = "#{remaining}.000"
-
-		remaining = remaining.split(".").join(":")
-
-		return remaining
 }

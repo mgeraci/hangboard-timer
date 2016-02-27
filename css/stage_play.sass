@@ -1,3 +1,8 @@
+$card-padding: 40px
+
+// this mus match angleCount in js/card.coffee
+$angle-count: 10
+
 .stage-play
   background: palegoldenrod
 
@@ -10,7 +15,45 @@
   font-family: monospace
 
 .card
-  margin-top: 40px
-  width: 200px
-  padding: 40px
-  border: 1px solid green
+  position: absolute
+  width: 94%
+  height: 80%
+  top: 10%
+  left: 3%
+  padding: $card-padding
+  border-radius: 4px
+  background: lightgray
+  @include transition(transform 200ms ease-in)
+
+  // a set of classes to animate a card's departure from the screen
+  @for $i from 0 through $angle-count
+    &--is-leaving-#{$i}
+      @include transform(rotate(#{$angle-count * -0.5 + $i}deg) translateY(130%))
+
+  // color states
+  &--hang
+    background: orange
+
+  &--rest
+    background: pink
+
+  &-status,
+  &-time,
+  &-rep
+    display: block
+    width: 100%
+    text-align: center
+
+  &-status
+    font-size: 5vw
+
+  &-time
+    font-family: monospace
+
+  &-rep
+    position: absolute
+    padding: $card-padding / 2
+    left: 0
+    bottom: 0
+    font-size: 4vw
+    text-align: right

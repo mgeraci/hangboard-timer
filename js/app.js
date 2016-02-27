@@ -166,9 +166,11 @@
 	Dom = __webpack_require__(4);
 
 	Card = Card = (function() {
+	  Card.prototype.angleCount = 10;
+
 	  function Card() {
 	    this.el = $(this.template());
-	    Dom.stages.play.append(this.el);
+	    Dom.stages.play.prepend(this.el);
 	    this.time = this.el.find(".card-time");
 	    this.status = this.el.find(".card-status");
 	    this.rep = this.el.find(".card-rep");
@@ -178,7 +180,7 @@
 	  }
 
 	  Card.prototype.template = function() {
-	    return "<div class=\"card\">\n	<span class=\"card-time\"></span>\n	<span class=\"card-status\"></span>\n	<span class=\"card-rep\"></span>\n</div>";
+	    return "<div class=\"card\">\n	<span class=\"card-status\"></span>\n	<span class=\"card-time\"></span>\n	<span class=\"card-rep\"></span>\n</div>";
 	  };
 
 	  Card.prototype.update = function(nextState) {
@@ -191,6 +193,7 @@
 	      this.time.text(time);
 	    }
 	    if (((ref1 = this.state) != null ? ref1.status : void 0) !== nextState.status) {
+	      this.el.addClass("card--" + nextState.status);
 	      text = C.phrases[nextState.status];
 	      this.status.text(text);
 	    }
@@ -201,6 +204,9 @@
 	  };
 
 	  Card.prototype.destroy = function() {
+	    var i;
+	    i = Math.floor(Math.random() * this.angleCount);
+	    this.el.addClass("card--is-leaving-" + i);
 	    return setTimeout((function(_this) {
 	      return function() {
 	        return _this.el.remove();
@@ -218,8 +224,11 @@
 	    if (remaining.indexOf(".") < 0) {
 	      remaining = remaining + ".000";
 	    }
-	    remaining = remaining.split(".").join(":");
-	    return remaining;
+	    remaining = remaining.split(".");
+	    while (remaining[1].length < 3) {
+	      remaining[1] = remaining[1] + "0";
+	    }
+	    return remaining.join(":");
 	  };
 
 	  return Card;

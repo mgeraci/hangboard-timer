@@ -45,9 +45,12 @@ body
 .stage
   @include fullscreen
   z-index: 1
+  opacity: 0
+  @include transition(opacity 250ms linear)
 
   &--active
     z-index: 2
+    opacity: 1
 
 
 // include subfiles

@@ -22,9 +22,14 @@ body {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  z-index: 1; }
+  z-index: 1;
+  opacity: 0;
+  -webkit-transition: opacity 250ms linear;
+  -moz-transition: opacity 250ms linear;
+  transition: opacity 250ms linear; }
   .stage--active {
-    z-index: 2; }
+    z-index: 2;
+    opacity: 1; }
 
 .stage-setup {
   background: aliceblue; }
@@ -82,7 +87,99 @@ body {
   font-family: monospace; }
 
 .card {
-  margin-top: 40px;
-  width: 200px;
+  position: absolute;
+  width: 94%;
+  height: 80%;
+  top: 10%;
+  left: 3%;
   padding: 40px;
-  border: 1px solid green; }
+  border-radius: 4px;
+  background: lightgray;
+  -webkit-transition: -webkit-transform 200ms ease-in;
+  -moz-transition: -moz-transform 200ms ease-in;
+  transition: transform 200ms ease-in; }
+  .card--is-leaving-0 {
+    -webkit-transform: rotate(-5deg) translateY(130%);
+    -moz-transform: rotate(-5deg) translateY(130%);
+    -ms-transform: rotate(-5deg) translateY(130%);
+    -o-transform: rotate(-5deg) translateY(130%);
+    transform: rotate(-5deg) translateY(130%); }
+  .card--is-leaving-1 {
+    -webkit-transform: rotate(-4deg) translateY(130%);
+    -moz-transform: rotate(-4deg) translateY(130%);
+    -ms-transform: rotate(-4deg) translateY(130%);
+    -o-transform: rotate(-4deg) translateY(130%);
+    transform: rotate(-4deg) translateY(130%); }
+  .card--is-leaving-2 {
+    -webkit-transform: rotate(-3deg) translateY(130%);
+    -moz-transform: rotate(-3deg) translateY(130%);
+    -ms-transform: rotate(-3deg) translateY(130%);
+    -o-transform: rotate(-3deg) translateY(130%);
+    transform: rotate(-3deg) translateY(130%); }
+  .card--is-leaving-3 {
+    -webkit-transform: rotate(-2deg) translateY(130%);
+    -moz-transform: rotate(-2deg) translateY(130%);
+    -ms-transform: rotate(-2deg) translateY(130%);
+    -o-transform: rotate(-2deg) translateY(130%);
+    transform: rotate(-2deg) translateY(130%); }
+  .card--is-leaving-4 {
+    -webkit-transform: rotate(-1deg) translateY(130%);
+    -moz-transform: rotate(-1deg) translateY(130%);
+    -ms-transform: rotate(-1deg) translateY(130%);
+    -o-transform: rotate(-1deg) translateY(130%);
+    transform: rotate(-1deg) translateY(130%); }
+  .card--is-leaving-5 {
+    -webkit-transform: rotate(0deg) translateY(130%);
+    -moz-transform: rotate(0deg) translateY(130%);
+    -ms-transform: rotate(0deg) translateY(130%);
+    -o-transform: rotate(0deg) translateY(130%);
+    transform: rotate(0deg) translateY(130%); }
+  .card--is-leaving-6 {
+    -webkit-transform: rotate(1deg) translateY(130%);
+    -moz-transform: rotate(1deg) translateY(130%);
+    -ms-transform: rotate(1deg) translateY(130%);
+    -o-transform: rotate(1deg) translateY(130%);
+    transform: rotate(1deg) translateY(130%); }
+  .card--is-leaving-7 {
+    -webkit-transform: rotate(2deg) translateY(130%);
+    -moz-transform: rotate(2deg) translateY(130%);
+    -ms-transform: rotate(2deg) translateY(130%);
+    -o-transform: rotate(2deg) translateY(130%);
+    transform: rotate(2deg) translateY(130%); }
+  .card--is-leaving-8 {
+    -webkit-transform: rotate(3deg) translateY(130%);
+    -moz-transform: rotate(3deg) translateY(130%);
+    -ms-transform: rotate(3deg) translateY(130%);
+    -o-transform: rotate(3deg) translateY(130%);
+    transform: rotate(3deg) translateY(130%); }
+  .card--is-leaving-9 {
+    -webkit-transform: rotate(4deg) translateY(130%);
+    -moz-transform: rotate(4deg) translateY(130%);
+    -ms-transform: rotate(4deg) translateY(130%);
+    -o-transform: rotate(4deg) translateY(130%);
+    transform: rotate(4deg) translateY(130%); }
+  .card--is-leaving-10 {
+    -webkit-transform: rotate(5deg) translateY(130%);
+    -moz-transform: rotate(5deg) translateY(130%);
+    -ms-transform: rotate(5deg) translateY(130%);
+    -o-transform: rotate(5deg) translateY(130%);
+    transform: rotate(5deg) translateY(130%); }
+  .card--hang {
+    background: orange; }
+  .card--rest {
+    background: pink; }
+  .card-status, .card-time, .card-rep {
+    display: block;
+    width: 100%;
+    text-align: center; }
+  .card-status {
+    font-size: 5vw; }
+  .card-time {
+    font-family: monospace; }
+  .card-rep {
+    position: absolute;
+    padding: 20px;
+    left: 0;
+    bottom: 0;
+    font-size: 4vw;
+    text-align: right; }

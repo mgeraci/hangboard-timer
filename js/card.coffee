@@ -3,9 +3,12 @@ C = require("./constants.coffee")
 Dom = require("./dom.coffee")
 
 Card = class Card
+	# this must match $angle-count in css/stage_play.sass
+	angleCount: 10
+
 	constructor: ->
 		@el = $(@template())
-		Dom.stages.play.append(@el)
+		Dom.stages.play.prepend(@el)
 		@time = @el.find(".card-time")
 		@status = @el.find(".card-status")
 		@rep = @el.find(".card-rep")
@@ -16,8 +19,8 @@ Card = class Card
 	template: ->
 		return """
 			<div class="card">
-				<span class="card-time"></span>
 				<span class="card-status"></span>
+				<span class="card-time"></span>
 				<span class="card-rep"></span>
 			</div>
 		"""
@@ -30,6 +33,7 @@ Card = class Card
 			@time.text(time)
 
 		if @state?.status != nextState.status
+			@el.addClass("card--#{nextState.status}")
 			text = C.phrases[nextState.status]
 			@status.text(text)
 
@@ -39,7 +43,9 @@ Card = class Card
 		@state = nextState
 
 	destroy: ->
-		# fake a remove transition here
+		i = Math.floor(Math.random() * @angleCount)
+		@el.addClass("card--is-leaving-#{i}")
+
 		setTimeout(=>
 			@el.remove()
 		, 1000)
@@ -57,8 +63,12 @@ Card = class Card
 		if remaining.indexOf(".") < 0
 			remaining = "#{remaining}.000"
 
-		remaining = remaining.split(".").join(":")
+		remaining = remaining.split(".")
 
-		return remaining
+		# pad the zeros so that the number doesn't jump around as much
+		while remaining[1].length < 3
+			remaining[1] = "#{remaining[1]}0"
+
+		return remaining.join(":")
 
 module.exports = Card

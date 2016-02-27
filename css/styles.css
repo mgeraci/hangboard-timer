@@ -10,9 +10,10 @@ body {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: lightgray;
+  background: #fffff5;
   font-family: Helvetica Nueue, Helvetica, Arial, sans-serif;
-  font-size: 40px; }
+  font-size: 40px;
+  color: #34314c; }
 
 .stage {
   display: block;
@@ -32,7 +33,7 @@ body {
     opacity: 1; }
 
 .stage-setup {
-  background: aliceblue; }
+  background: #fffff5; }
   .stage-setup h1,
   .stage-setup p {
     width: 100%;
@@ -60,11 +61,13 @@ body {
   left: 0;
   width: 100%;
   height: 15%;
-  background: lightgreen;
-  color: white; }
+  background: #47b8e0;
+  color: #fffff5;
+  font-size: 10vw;
+  letter-spacing: 0.1em; }
 
 .stage-play {
-  background: palegoldenrod; }
+  background: #fffff5; }
 
 #stop {
   margin: 0;
@@ -89,15 +92,16 @@ body {
 .card {
   position: absolute;
   width: 94%;
-  height: 80%;
-  top: 10%;
+  height: 96%;
+  top: 2%;
   left: 3%;
   padding: 40px;
   border-radius: 4px;
-  background: lightgray;
-  -webkit-transition: -webkit-transform 200ms ease-in;
-  -moz-transition: -moz-transform 200ms ease-in;
-  transition: transform 200ms ease-in; }
+  background: #a3dceb;
+  -webkit-transition: -webkit-transform 400ms ease-in;
+  -moz-transition: -moz-transform 400ms ease-in;
+  transition: transform 400ms ease-in;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.05); }
   .card--is-leaving-0 {
     -webkit-transform: rotate(-5deg) translateY(130%);
     -moz-transform: rotate(-5deg) translateY(130%);
@@ -165,21 +169,28 @@ body {
     -o-transform: rotate(5deg) translateY(130%);
     transform: rotate(5deg) translateY(130%); }
   .card--hang {
-    background: orange; }
+    background: #ffc952; }
   .card--rest {
-    background: pink; }
+    background: #ff7473; }
   .card-status, .card-time, .card-rep {
     display: block;
     width: 100%;
-    text-align: center; }
-  .card-status {
-    font-size: 5vw; }
+    text-align: center;
+    font-size: 7vw; }
   .card-time {
-    font-family: monospace; }
+    position: absolute;
+    top: 50%;
+    left: 0;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
+    font-family: monospace;
+    font-size: 17vw; }
   .card-rep {
     position: absolute;
     padding: 20px;
     left: 0;
     bottom: 0;
-    font-size: 4vw;
     text-align: right; }

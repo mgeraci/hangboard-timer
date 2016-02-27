@@ -5,6 +5,16 @@
 @import "reset.css"
 
 
+// colors
+///////////////////////////////////////////////////////////////////////////////
+
+$white: #fffff5
+$pink: #ff7473
+$orange: #ffc952
+$blue: #47b8e0
+$dark-blue: #34314c
+
+
 // mixins
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -36,9 +46,10 @@
 
 body
   @include fullscreen
-  background: lightgray
+  background: $white
   font-family: Helvetica Nueue, Helvetica, Arial, sans-serif
   font-size: 40px
+  color: $dark-blue
 
 // each state (setup form and active "play" state) gets its own wrapper, which
 // takes up the whole screen

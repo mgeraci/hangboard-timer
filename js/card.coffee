@@ -30,7 +30,7 @@ Card = class Card
 
 		if @state?.time != nextState.time && nextState.timeGoal
 			time = @formatCountdown(nextState.time, nextState.timeGoal)
-			@time.text(time)
+			@time.html(time)
 
 		if @state?.status != nextState.status
 			@el.addClass("card--#{nextState.status}")
@@ -69,6 +69,6 @@ Card = class Card
 		while remaining[1].length < 3
 			remaining[1] = "#{remaining[1]}0"
 
-		return remaining.join(":")
+		return remaining.join("<span class='colon'>:</span>")
 
 module.exports = Card

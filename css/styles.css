@@ -194,3 +194,7 @@ body {
     left: 0;
     bottom: 0;
     text-align: right; }
+  .card .colon {
+    position: relative;
+    bottom: 7px;
+    font-size: 70%; }

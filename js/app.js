@@ -190,7 +190,7 @@
 	    }
 	    if (((ref = this.state) != null ? ref.time : void 0) !== nextState.time && nextState.timeGoal) {
 	      time = this.formatCountdown(nextState.time, nextState.timeGoal);
-	      this.time.text(time);
+	      this.time.html(time);
 	    }
 	    if (((ref1 = this.state) != null ? ref1.status : void 0) !== nextState.status) {
 	      this.el.addClass("card--" + nextState.status);
@@ -228,7 +228,7 @@
 	    while (remaining[1].length < 3) {
 	      remaining[1] = remaining[1] + "0";
 	    }
-	    return remaining.join(":");
+	    return remaining.join("<span class='colon'>:</span>");
 	  };
 
 	  return Card;

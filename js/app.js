@@ -81,6 +81,11 @@
 	    })(this));
 	  },
 	  start: function() {
+	    var formValues;
+	    formValues = Form.getValues();
+	    this.times[C.states.hang] = formValues[C.states.hang];
+	    this.times[C.states.rest] = formValues[C.states.rest];
+	    this.reps = formValues.reps;
 	    this.startTimestamp = Date.now();
 	    this.currentState = this.getNextState();
 	    this.currentRep = 0;
@@ -10165,10 +10170,18 @@
 	    } else {
 	      value--;
 	    }
-	    if (value < 0) {
-	      value = 0;
+	    if (value < 1) {
+	      value = 1;
 	    }
 	    return field.val(value);
+	  },
+	  getValues: function() {
+	    var res;
+	    res = {};
+	    res[C.states.hang] = parseInt(this.hang.val(), 10) * 1000;
+	    res[C.states.rest] = parseInt(this.rest.val(), 10) * 1000;
+	    res.reps = parseInt(this.reps.val(), 10);
+	    return res;
 	  }
 	};
 

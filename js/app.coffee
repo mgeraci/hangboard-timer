@@ -34,6 +34,12 @@ window.hangboardTimer = {
 		)
 
 	start: ->
+		# fetch the values from the form
+		formValues = Form.getValues()
+		@times[C.states.hang] = formValues[C.states.hang]
+		@times[C.states.rest] = formValues[C.states.rest]
+		@reps = formValues.reps
+
 		@startTimestamp = Date.now()
 		@currentState = @getNextState()
 		@currentRep = 0

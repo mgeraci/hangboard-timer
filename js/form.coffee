@@ -31,8 +31,16 @@ module.exports = {
 		else
 			value--
 
-		if value < 0
-			value = 0
+		if value < 1
+			value = 1
 
 		field.val(value)
+
+	getValues: ->
+		res = {}
+		res[C.states.hang] = parseInt(@hang.val(), 10) * 1000
+		res[C.states.rest] = parseInt(@rest.val(), 10) * 1000
+		res.reps = parseInt(@reps.val(), 10)
+
+		return res
 }

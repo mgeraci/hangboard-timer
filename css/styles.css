@@ -11,7 +11,7 @@ body {
   height: 100%;
   overflow: hidden;
   background: #fffff5;
-  font-family: Helvetica Nueue, Helvetica, Arial, sans-serif;
+  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
   font-size: 40px;
   color: #34314c; }
 
@@ -34,18 +34,52 @@ body {
 
 .stage-setup {
   background: #fffff5; }
-  .stage-setup h1,
-  .stage-setup p {
+  .stage-setup-form {
     width: 100%;
-    padding: 6%;
-    padding-bottom: 0; }
+    padding: 6%; }
   .stage-setup h1 {
     font-size: 10vw;
     font-weight: 100;
+    padding-bottom: 6vw;
     letter-spacing: 1px; }
-  .stage-setup p {
+  .stage-setup fieldset {
+    margin-bottom: 6vw;
     font-size: 5vw;
-    line-height: 7vw; }
+    line-height: 7vw;
+    font-weight: 500; }
+  .stage-setup .label-help {
+    font-weight: normal;
+    color: #544f7b; }
+  .stage-setup .taptime {
+    width: 100%;
+    height: 46px;
+    margin-top: 6px;
+    border: 1px solid #47b8e0;
+    border-radius: 4px; }
+    .stage-setup .taptime-button, .stage-setup .taptime-input {
+      margin: 0;
+      padding: 0;
+      background: none;
+      border: none;
+      font-family: inherit;
+      font-size: inherit;
+      line-height: inherit;
+      outline: none;
+      float: left;
+      height: 100%;
+      font-size: 8vw; }
+    .stage-setup .taptime-button {
+      width: 17%;
+      background: #47b8e0;
+      color: #fffff5; }
+      .stage-setup .taptime-button:active {
+        background: #31b0dc; }
+    .stage-setup .taptime-input {
+      width: 66%;
+      border: none;
+      outline: none;
+      text-align: center;
+      background: #fff; }
 
 #start {
   margin: 0;
@@ -65,6 +99,8 @@ body {
   color: #fffff5;
   font-size: 10vw;
   letter-spacing: 0.1em; }
+  #start:active {
+    background: #31b0dc; }
 
 .stage-play {
   background: #fffff5; }

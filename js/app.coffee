@@ -1,6 +1,7 @@
 Card = require("./card.coffee")
 C = require("./constants.coffee")
 Dom = require("./dom.coffee")
+Form = require("./form.coffee")
 
 window.hangboardTimer = {
 	# defaults for constants
@@ -21,6 +22,7 @@ window.hangboardTimer = {
 
 	init: ->
 		Dom.init()
+		Form.init()
 		@currentState = C.states.stopped
 
 		Dom.start.on("click tap", =>

@@ -1,20 +1,56 @@
+$active-color: darken($blue, 5%)
+
 .stage-setup
   background: $white
 
-  h1,
-  p
+  &-form
     width: 100%
     padding: 6%
-    padding-bottom: 0
 
   h1
     font-size: 10vw
     font-weight: 100
+    padding-bottom: 6vw
     letter-spacing: 1px
 
-  p
+  fieldset
+    margin-bottom: 6vw
     font-size: 5vw
     line-height: 7vw
+    font-weight: 500
+
+  .label-help
+    font-weight: normal
+    color: lighten($dark-blue, 15%)
+
+  .taptime
+    width: 100%
+    height: 46px
+    margin-top: 6px
+    border: 1px solid $blue
+    border-radius: 4px
+
+    &-button,
+    &-input
+      @include bare-button
+      float: left
+      height: 100%
+      font-size: 8vw
+
+    &-button
+      width: 17%
+      background: $blue
+      color: $white
+
+      &:active
+        background: $active-color
+
+    &-input
+      width: 66%
+      border: none
+      outline: none
+      text-align: center
+      background: #fff
 
 #start
   @include bare-button
@@ -27,3 +63,6 @@
   color: $white
   font-size: 10vw
   letter-spacing: 0.1em
+
+  &:active
+    background: $active-color

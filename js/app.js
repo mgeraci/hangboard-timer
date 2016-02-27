@@ -44,13 +44,15 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var C, Card, Dom;
+	var C, Card, Dom, Form;
 
 	Card = __webpack_require__(1);
 
 	C = __webpack_require__(3);
 
 	Dom = __webpack_require__(4);
+
+	Form = __webpack_require__(5);
 
 	window.hangboardTimer = {
 	  reps: 2,
@@ -65,6 +67,7 @@
 	  currentState: null,
 	  init: function() {
 	    Dom.init();
+	    Form.init();
 	    this.currentState = C.states.stopped;
 	    Dom.start.on("click tap", (function(_this) {
 	      return function() {
@@ -10091,6 +10094,11 @@
 	    stopped: "Stopped",
 	    hang: "Hang",
 	    rest: "Rest"
+	  },
+	  defaults: {
+	    hangTime: 2000,
+	    restTime: 1000,
+	    reps: 2
 	  }
 	};
 
@@ -10113,6 +10121,54 @@
 	      setup: $(".stage-setup"),
 	      play: $(".stage-play")
 	    };
+	  }
+	};
+
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var $, C;
+
+	$ = __webpack_require__(2);
+
+	C = __webpack_require__(3);
+
+	module.exports = {
+	  init: function() {
+	    this.hang = $("input[name=hang]");
+	    this.rest = $("input[name=rest]");
+	    this.reps = $("input[name=reps]");
+	    this.hang.val(C.defaults.hangTime / 1000);
+	    this.rest.val(C.defaults.restTime / 1000);
+	    this.reps.val(C.defaults.reps);
+	    return $(".taptime-button").on("click tap", (function(_this) {
+	      return function(e) {
+	        var button, direction, field;
+	        button = $(e.currentTarget);
+	        field = button.closest(".taptime").find("input");
+	        if (button.hasClass("taptime-button--increment")) {
+	          direction = "increment";
+	        } else {
+	          direction = "decrement";
+	        }
+	        return _this.changeValue(field, direction);
+	      };
+	    })(this));
+	  },
+	  changeValue: function(field, direction) {
+	    var value;
+	    value = field.val();
+	    if (direction === "increment") {
+	      value++;
+	    } else {
+	      value--;
+	    }
+	    if (value < 0) {
+	      value = 0;
+	    }
+	    return field.val(value);
 	  }
 	};
 

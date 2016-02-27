@@ -8,11 +8,39 @@
 	<body>
 
 		<div class="stage stage-setup stage--active">
-			<h1>Hangboard Timer</h1>
-			<p>
-				You&rsquo;ll get a countdown to prepare. Tap anywhere to stop once
-				you&rsquo;ve begun.
-			</p>
+			<div class="stage-setup-form">
+				<h1>Hangboard Timer</h1>
+
+				<fieldset>
+					Hang time
+					<span class="label-help">(in seconds)</span>
+					<div class="taptime">
+						<button class="taptime-button taptime-button--decrement">-</button>
+						<input class="taptime-input" name="hang" type="text" />
+						<button class="taptime-button taptime-button--increment">+</button>
+					</div>
+				</fieldset>
+
+				<fieldset>
+					Rest time
+					<span class="label-help">(in seconds)</span>
+					<div class="taptime">
+						<button class="taptime-button taptime-button--decrement">-</button>
+						<input class="taptime-input" name="rest" type="text" />
+						<button class="taptime-button taptime-button--increment">+</button>
+					</div>
+				</fieldset>
+
+				<fieldset>
+					Reps
+					<div class="taptime">
+						<button class="taptime-button taptime-button--decrement">-</button>
+						<input class="taptime-input" name="reps" type="text" />
+						<button class="taptime-button taptime-button--increment">+</button>
+					</div>
+				</fieldset>
+			</div>
+
 			<button id="start">start</button>
 		</div>
 

@@ -12,4 +12,10 @@ module.exports = {
 		hang: "Hang"
 		rest: "Rest"
 	}
+
+	defaults: {
+		hangTime: 2000
+		restTime: 1000
+		reps: 2
+	}
 }

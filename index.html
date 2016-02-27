@@ -10,47 +10,64 @@
 	</head>
 	<body>
 
-		<div class="stage stage-setup stage--active">
-			<div class="stage-setup-form">
-				<h1>Hangboard Timer</h1>
+		<div class="stages">
+			<div class="stages-content">
 
-				<fieldset>
-					Hang time
-					<span class="label-help">(in seconds)</span>
-					<div class="taptime">
-						<button class="taptime-button taptime-button--decrement">-</button>
-						<input class="taptime-input" name="hang" type="text" />
-						<button class="taptime-button taptime-button--increment">+</button>
-					</div>
-				</fieldset>
+				<div class="stage stage-setup stage--active">
+					<div class="stage-setup-form">
+						<h1>Hangboard Timer</h1>
 
-				<fieldset>
-					Rest time
-					<span class="label-help">(in seconds)</span>
-					<div class="taptime">
-						<button class="taptime-button taptime-button--decrement">-</button>
-						<input class="taptime-input" name="rest" type="text" />
-						<button class="taptime-button taptime-button--increment">+</button>
-					</div>
-				</fieldset>
+						<fieldset>
+							Hang time
+							<span class="label-help">(in seconds)</span>
+							<div class="taptime">
+								<input class="taptime-input" name="hang" type="text" />
+								<button class="taptime-button taptime-button--decrement">
+									<span class="taptime-button-text">-</span>
+								</button>
+								<button class="taptime-button taptime-button--increment">
+									<span class="taptime-button-text">+</span>
+								</button>
+							</div>
+						</fieldset>
 
-				<fieldset>
-					Reps
-					<div class="taptime">
-						<button class="taptime-button taptime-button--decrement">-</button>
-						<input class="taptime-input" name="reps" type="text" />
-						<button class="taptime-button taptime-button--increment">+</button>
+						<fieldset>
+							Rest time
+							<span class="label-help">(in seconds)</span>
+							<div class="taptime">
+								<input class="taptime-input" name="rest" type="text" />
+								<button class="taptime-button taptime-button--decrement">
+									<span class="taptime-button-text">-</span>
+								</button>
+								<button class="taptime-button taptime-button--increment">
+									<span class="taptime-button-text">+</span>
+								</button>
+							</div>
+						</fieldset>
+
+						<fieldset>
+							Reps
+							<div class="taptime">
+								<input class="taptime-input" name="reps" type="text" />
+								<button class="taptime-button taptime-button--decrement">
+									<span class="taptime-button-text">-</span>
+								</button>
+								<button class="taptime-button taptime-button--increment">
+									<span class="taptime-button-text">+</span>
+								</button>
+							</div>
+						</fieldset>
 					</div>
-				</fieldset>
+
+					<button id="start">start</button>
+				</div>
+
+				<div class="stage stage-play">
+					<button id="stop"></button>
+				</div>
+
 			</div>
-
-			<button id="start">start</button>
 		</div>
-
-		<div class="stage stage-play">
-			<button id="stop"></button>
-		</div>
-
 
 		<script type="text/javascript" src="./js/app.js"></script>
 		<script>

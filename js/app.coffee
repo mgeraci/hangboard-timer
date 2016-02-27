@@ -5,25 +5,21 @@ Form = require("./form.coffee")
 
 window.hangboardTimer = {
 	# defaults for constants
-	reps: 2
+	reps: C.defaults.reps
 	times: {
-		hang: 2000
-		rest: 1000
-		get_ready: 2000
+		hang: C.defaults[C.states.hang]
+		rest: C.defaults[C.states.rest]
+		get_ready: C.defaults[C.states.get_ready]
 	}
-
-	# how frequently the app should update
-	intervalTime: 50
 
 	# vars used on a per-exercise basis
 	startTimestamp: null
 	currentRep: null
-	currentState: null
+	currentState: C.states.stopped
 
 	init: ->
 		Dom.init()
 		Form.init()
-		@currentState = C.states.stopped
 
 		Dom.start.on("click tap", =>
 			@start()
@@ -41,14 +37,14 @@ window.hangboardTimer = {
 		@reps = formValues.reps
 
 		@startTimestamp = Date.now()
-		@currentState = @getNextState()
+		@triggerNextState()
 		@currentRep = 0
 		Dom.stages.setup.removeClass(Dom.activeClass)
 		Dom.stages.play.addClass(Dom.activeClass)
 
 		@interval = setInterval(=>
 			@update()
-		, @intervalTime)
+		, C.intervalTime)
 
 	stop: ->
 		@startTimestamp = null
@@ -63,7 +59,10 @@ window.hangboardTimer = {
 
 	update: ->
 		now = Date.now()
-		elaspedTime = now - @startTimestamp
+		if @startTimestamp?
+			elaspedTime = now - @startTimestamp
+		else
+			elaspedTime = 0
 		stateDuration = @times[@currentState]
 
 		if @currentRep? && @currentRep > 0
@@ -77,19 +76,25 @@ window.hangboardTimer = {
 		})
 
 		if elaspedTime > stateDuration
-			nextState = @getNextState()
+			@triggerNextState(now)
 
-			# short circuit if we hit the end state
-			if nextState == C.states.stopped
-				@stop()
-				return
+	triggerNextState: (stateStartTime = Date.now()) ->
+		nextState = @getNextState()
 
-			@startTimestamp = now
-			@currentState = nextState
+		@card?.destroy()
 
-			# if we're starting a new rep, increment the current rep count
-			if nextState == C.states.hang
-				@currentRep++
+		# short circuit if we hit the end state
+		if nextState == C.states.stopped
+			@stop()
+			return
+
+		@card = new Card()
+		@startTimestamp = stateStartTime
+		@currentState = nextState
+
+		# if we're starting a new rep, increment the current rep count
+		if nextState == C.states.hang
+			@currentRep++
 
 	getNextState: ->
 		if @currentState == C.states.stopped
@@ -102,14 +107,6 @@ window.hangboardTimer = {
 			nextState = C.states.rest
 		else
 			nextState = C.states.stopped
-
-		console.log "getNextState, current state: #{@currentState}", @currentRep, @reps
-		console.log "next state: #{nextState}"
-
-		@card?.destroy()
-
-		if nextState != C.states.stopped
-			@card = new Card()
 
 		return nextState
 }

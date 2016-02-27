@@ -14,8 +14,12 @@ module.exports = {
 	}
 
 	defaults: {
-		hangTime: 2000
-		restTime: 1000
+		hang: 2000
+		rest: 1000
+		get_ready: 5000
 		reps: 2
 	}
+
+	# how frequently the app should update
+	intervalTime: 50
 }

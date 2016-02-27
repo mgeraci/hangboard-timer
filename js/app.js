@@ -55,20 +55,18 @@
 	Form = __webpack_require__(5);
 
 	window.hangboardTimer = {
-	  reps: 2,
+	  reps: C.defaults.reps,
 	  times: {
-	    hang: 2000,
-	    rest: 1000,
-	    get_ready: 2000
+	    hang: C.defaults[C.states.hang],
+	    rest: C.defaults[C.states.rest],
+	    get_ready: C.defaults[C.states.get_ready]
 	  },
-	  intervalTime: 50,
 	  startTimestamp: null,
 	  currentRep: null,
-	  currentState: null,
+	  currentState: C.states.stopped,
 	  init: function() {
 	    Dom.init();
 	    Form.init();
-	    this.currentState = C.states.stopped;
 	    Dom.start.on("click tap", (function(_this) {
 	      return function() {
 	        return _this.start();
@@ -87,7 +85,7 @@
 	    this.times[C.states.rest] = formValues[C.states.rest];
 	    this.reps = formValues.reps;
 	    this.startTimestamp = Date.now();
-	    this.currentState = this.getNextState();
+	    this.triggerNextState();
 	    this.currentRep = 0;
 	    Dom.stages.setup.removeClass(Dom.activeClass);
 	    Dom.stages.play.addClass(Dom.activeClass);
@@ -95,7 +93,7 @@
 	      return function() {
 	        return _this.update();
 	      };
-	    })(this), this.intervalTime);
+	    })(this), C.intervalTime);
 	  },
 	  stop: function() {
 	    this.startTimestamp = null;
@@ -109,9 +107,13 @@
 	    }
 	  },
 	  update: function() {
-	    var elaspedTime, nextState, now, rep, stateDuration;
+	    var elaspedTime, now, rep, stateDuration;
 	    now = Date.now();
-	    elaspedTime = now - this.startTimestamp;
+	    if (this.startTimestamp != null) {
+	      elaspedTime = now - this.startTimestamp;
+	    } else {
+	      elaspedTime = 0;
+	    }
 	    stateDuration = this.times[this.currentState];
 	    if ((this.currentRep != null) && this.currentRep > 0) {
 	      rep = "rep " + this.currentRep + "/" + this.reps;
@@ -123,20 +125,31 @@
 	      rep: rep
 	    });
 	    if (elaspedTime > stateDuration) {
-	      nextState = this.getNextState();
-	      if (nextState === C.states.stopped) {
-	        this.stop();
-	        return;
-	      }
-	      this.startTimestamp = now;
-	      this.currentState = nextState;
-	      if (nextState === C.states.hang) {
-	        return this.currentRep++;
-	      }
+	      return this.triggerNextState(now);
+	    }
+	  },
+	  triggerNextState: function(stateStartTime) {
+	    var nextState, ref;
+	    if (stateStartTime == null) {
+	      stateStartTime = Date.now();
+	    }
+	    nextState = this.getNextState();
+	    if ((ref = this.card) != null) {
+	      ref.destroy();
+	    }
+	    if (nextState === C.states.stopped) {
+	      this.stop();
+	      return;
+	    }
+	    this.card = new Card();
+	    this.startTimestamp = stateStartTime;
+	    this.currentState = nextState;
+	    if (nextState === C.states.hang) {
+	      return this.currentRep++;
 	    }
 	  },
 	  getNextState: function() {
-	    var nextState, ref;
+	    var nextState;
 	    if (this.currentState === C.states.stopped) {
 	      nextState = C.states.get_ready;
 	    } else if (this.currentState === C.states.get_ready) {
@@ -147,14 +160,6 @@
 	      nextState = C.states.rest;
 	    } else {
 	      nextState = C.states.stopped;
-	    }
-	    console.log("getNextState, current state: " + this.currentState, this.currentRep, this.reps);
-	    console.log("next state: " + nextState);
-	    if ((ref = this.card) != null) {
-	      ref.destroy();
-	    }
-	    if (nextState !== C.states.stopped) {
-	      this.card = new Card();
 	    }
 	    return nextState;
 	  }
@@ -10101,10 +10106,12 @@
 	    rest: "Rest"
 	  },
 	  defaults: {
-	    hangTime: 2000,
-	    restTime: 1000,
+	    hang: 2000,
+	    rest: 1000,
+	    get_ready: 5000,
 	    reps: 2
-	  }
+	  },
+	  intervalTime: 50
 	};
 
 
@@ -10145,8 +10152,8 @@
 	    this.hang = $("input[name=hang]");
 	    this.rest = $("input[name=rest]");
 	    this.reps = $("input[name=reps]");
-	    this.hang.val(C.defaults.hangTime / 1000);
-	    this.rest.val(C.defaults.restTime / 1000);
+	    this.hang.val(C.defaults[C.states.hang] / 1000);
+	    this.rest.val(C.defaults[C.states.rest] / 1000);
 	    this.reps.val(C.defaults.reps);
 	    return $(".taptime-button").on("click tap", (function(_this) {
 	      return function(e) {

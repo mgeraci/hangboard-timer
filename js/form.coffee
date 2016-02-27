@@ -7,8 +7,8 @@ module.exports = {
 		@rest = $("input[name=rest]")
 		@reps = $("input[name=reps]")
 
-		@hang.val(C.defaults.hangTime / 1000)
-		@rest.val(C.defaults.restTime / 1000)
+		@hang.val(C.defaults[C.states.hang] / 1000)
+		@rest.val(C.defaults[C.states.rest] / 1000)
 		@reps.val(C.defaults.reps)
 
 		$(".taptime-button").on("click tap", (e) =>

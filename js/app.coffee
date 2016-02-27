@@ -6,9 +6,9 @@ window.hangboardTimer = {
 	# defaults for constants
 	reps: 2
 	times: {
-		hang: 4000
-		rest: 2000
-		get_ready: 5000
+		hang: 2000
+		rest: 1000
+		get_ready: 2000
 	}
 
 	# how frequently the app should update
@@ -31,9 +31,7 @@ window.hangboardTimer = {
 		)
 
 	start: ->
-		console.log 'starting'
 		@startTimestamp = Date.now()
-		@card = new Card()
 		@currentState = @getNextState()
 		@currentRep = 0
 
@@ -67,7 +65,6 @@ window.hangboardTimer = {
 
 		if elaspedTime > stateDuration
 			nextState = @getNextState()
-			console.log 'next state:', nextState
 
 			# short circuit if we hit the end state
 			if nextState == C.states.stopped
@@ -82,15 +79,24 @@ window.hangboardTimer = {
 				@currentRep++
 
 	getNextState: ->
-		console.log "getNextState", @currentRep, @reps
 		if @currentState == C.states.stopped
-			return C.states.get_ready
-		if @currentState == C.states.get_ready
-			return C.states.hang
-		if @currentState == C.states.rest
-			return C.states.hang
+			nextState = C.states.get_ready
+		else if @currentState == C.states.get_ready
+			nextState = C.states.hang
+		else if @currentState == C.states.rest
+			nextState = C.states.hang
 		else if @currentState == C.states.hang && @currentRep < @reps
-			return C.states.rest
+			nextState = C.states.rest
 		else
-			return C.states.stopped
+			nextState = C.states.stopped
+
+		console.log "getNextState, current state: #{@currentState}", @currentRep, @reps
+		console.log "next state: #{nextState}"
+
+		@card?.destroy()
+
+		if nextState != C.states.stopped
+			@card = new Card()
+
+		return nextState
 }

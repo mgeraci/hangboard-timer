@@ -31,7 +31,10 @@ Card = class Card
 		@state = nextState
 
 	destroy: ->
-		@el.remove()
+		# fake a remove transition here
+		setTimeout(=>
+			@el.remove()
+		, 1000)
 
 	template: ->
 		return """

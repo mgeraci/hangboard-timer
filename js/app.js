@@ -55,9 +55,9 @@
 	window.hangboardTimer = {
 	  reps: 2,
 	  times: {
-	    hang: 4000,
-	    rest: 2000,
-	    get_ready: 5000
+	    hang: 2000,
+	    rest: 1000,
+	    get_ready: 2000
 	  },
 	  intervalTime: 50,
 	  startTimestamp: null,
@@ -77,9 +77,7 @@
 	    })(this));
 	  },
 	  start: function() {
-	    console.log('starting');
 	    this.startTimestamp = Date.now();
-	    this.card = new Card();
 	    this.currentState = this.getNextState();
 	    this.currentRep = 0;
 	    return this.interval = setInterval((function(_this) {
@@ -113,7 +111,6 @@
 	    });
 	    if (elaspedTime > stateDuration) {
 	      nextState = this.getNextState();
-	      console.log('next state:', nextState);
 	      if (nextState === C.states.stopped) {
 	        this.stop();
 	        return;
@@ -126,20 +123,27 @@
 	    }
 	  },
 	  getNextState: function() {
-	    console.log("getNextState", this.currentRep, this.reps);
+	    var nextState, ref;
 	    if (this.currentState === C.states.stopped) {
-	      return C.states.get_ready;
-	    }
-	    if (this.currentState === C.states.get_ready) {
-	      return C.states.hang;
-	    }
-	    if (this.currentState === C.states.rest) {
-	      return C.states.hang;
+	      nextState = C.states.get_ready;
+	    } else if (this.currentState === C.states.get_ready) {
+	      nextState = C.states.hang;
+	    } else if (this.currentState === C.states.rest) {
+	      nextState = C.states.hang;
 	    } else if (this.currentState === C.states.hang && this.currentRep < this.reps) {
-	      return C.states.rest;
+	      nextState = C.states.rest;
 	    } else {
-	      return C.states.stopped;
+	      nextState = C.states.stopped;
 	    }
+	    console.log("getNextState, current state: " + this.currentState, this.currentRep, this.reps);
+	    console.log("next state: " + nextState);
+	    if ((ref = this.card) != null) {
+	      ref.destroy();
+	    }
+	    if (nextState !== C.states.stopped) {
+	      this.card = new Card();
+	    }
+	    return nextState;
 	  }
 	};
 
@@ -10024,7 +10028,11 @@
 	  };
 
 	  Card.prototype.destroy = function() {
-	    return this.el.remove();
+	    return setTimeout((function(_this) {
+	      return function() {
+	        return _this.el.remove();
+	      };
+	    })(this), 1000);
 	  };
 
 	  Card.prototype.template = function() {

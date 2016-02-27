@@ -1,4 +1,5 @@
 $ = require("jquery")
+C = require("./constants.coffee")
 
 Card = class Card
 	constructor: (timestamp, state) ->
@@ -21,7 +22,8 @@ Card = class Card
 			@time.text(time)
 
 		if @state?.status != nextState.status
-			@status.text(nextState.status)
+			text = C.phrases[nextState.status]
+			@status.text(text)
 
 		if @state?.rep != nextState.rep
 			@rep.text(nextState.rep)

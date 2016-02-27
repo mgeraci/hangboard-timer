@@ -44,11 +44,13 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var $, Card;
+	var $, C, Card;
 
 	$ = __webpack_require__(1);
 
 	Card = __webpack_require__(2);
+
+	C = __webpack_require__(3);
 
 	window.hangboardTimer = {
 	  reps: 2,
@@ -57,18 +59,12 @@
 	    rest: 2000,
 	    get_ready: 5000
 	  },
-	  states: {
-	    get_ready: "get_ready",
-	    stopped: "stopped",
-	    hang: "hang",
-	    rest: "rest"
-	  },
 	  intervalTime: 50,
 	  startTimestamp: null,
 	  currentRep: null,
 	  currentState: null,
 	  init: function() {
-	    this.currentState = this.states.stopped;
+	    this.currentState = C.states.stopped;
 	    $("#start").click((function(_this) {
 	      return function() {
 	        return _this.start();
@@ -95,7 +91,7 @@
 	  stop: function() {
 	    this.startTimestamp = null;
 	    this.currentRep = null;
-	    this.currentState = this.states.stopped;
+	    this.currentState = C.states.stopped;
 	    this.card.destroy();
 	    if (this.interval != null) {
 	      return clearInterval(this.interval);
@@ -118,31 +114,31 @@
 	    if (elaspedTime > stateDuration) {
 	      nextState = this.getNextState();
 	      console.log('next state:', nextState);
-	      if (nextState === this.states.stopped) {
+	      if (nextState === C.states.stopped) {
 	        this.stop();
 	        return;
 	      }
 	      this.startTimestamp = now;
 	      this.currentState = nextState;
-	      if (nextState === this.states.hang) {
+	      if (nextState === C.states.hang) {
 	        return this.currentRep++;
 	      }
 	    }
 	  },
 	  getNextState: function() {
 	    console.log("getNextState", this.currentRep, this.reps);
-	    if (this.currentState === this.states.stopped) {
-	      return this.states.get_ready;
+	    if (this.currentState === C.states.stopped) {
+	      return C.states.get_ready;
 	    }
-	    if (this.currentState === this.states.get_ready) {
-	      return this.states.hang;
+	    if (this.currentState === C.states.get_ready) {
+	      return C.states.hang;
 	    }
-	    if (this.currentState === this.states.rest) {
-	      return this.states.hang;
-	    } else if (this.currentState === this.states.hang && this.currentRep < this.reps) {
-	      return this.states.rest;
+	    if (this.currentState === C.states.rest) {
+	      return C.states.hang;
+	    } else if (this.currentState === C.states.hang && this.currentRep < this.reps) {
+	      return C.states.rest;
 	    } else {
-	      return this.states.stopped;
+	      return C.states.stopped;
 	    }
 	  }
 	};
@@ -9989,9 +9985,11 @@
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var $, Card;
+	var $, C, Card;
 
 	$ = __webpack_require__(1);
+
+	C = __webpack_require__(3);
 
 	Card = Card = (function() {
 	  function Card(timestamp, state) {
@@ -10007,7 +10005,7 @@
 	  }
 
 	  Card.prototype.update = function(nextState) {
-	    var ref, ref1, ref2, time;
+	    var ref, ref1, ref2, text, time;
 	    if (nextState == null) {
 	      return;
 	    }
@@ -10016,7 +10014,8 @@
 	      this.time.text(time);
 	    }
 	    if (((ref1 = this.state) != null ? ref1.status : void 0) !== nextState.status) {
-	      this.status.text(nextState.status);
+	      text = C.phrases[nextState.status];
+	      this.status.text(text);
 	    }
 	    if (((ref2 = this.state) != null ? ref2.rep : void 0) !== nextState.rep) {
 	      this.rep.text(nextState.rep);
@@ -10051,6 +10050,26 @@
 	})();
 
 	module.exports = Card;
+
+
+/***/ },
+/* 3 */
+/***/ function(module, exports) {
+
+	module.exports = {
+	  states: {
+	    get_ready: "get_ready",
+	    stopped: "stopped",
+	    hang: "hang",
+	    rest: "rest"
+	  },
+	  phrases: {
+	    get_ready: "Get ready...",
+	    stopped: "Stopped",
+	    hang: "Hang",
+	    rest: "Rest"
+	  }
+	};
 
 
 /***/ }

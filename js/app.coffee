@@ -1,5 +1,6 @@
 $ = require("jquery")
 Card = require("./card.coffee")
+C = require("./constants.coffee")
 
 window.hangboardTimer = {
 	# defaults for constants
@@ -8,13 +9,6 @@ window.hangboardTimer = {
 		hang: 4000
 		rest: 2000
 		get_ready: 5000
-	}
-
-	states: {
-		get_ready: "get_ready"
-		stopped: "stopped"
-		hang: "hang"
-		rest: "rest"
 	}
 
 	# how frequently the app should update
@@ -26,7 +20,7 @@ window.hangboardTimer = {
 	currentState: null
 
 	init: ->
-		@currentState = @states.stopped
+		@currentState = C.states.stopped
 
 		$("#start").click(=>
 			@start()
@@ -50,7 +44,7 @@ window.hangboardTimer = {
 	stop: ->
 		@startTimestamp = null
 		@currentRep = null
-		@currentState = @states.stopped
+		@currentState = C.states.stopped
 		@card.destroy()
 
 		if @interval?
@@ -76,7 +70,7 @@ window.hangboardTimer = {
 			console.log 'next state:', nextState
 
 			# short circuit if we hit the end state
-			if nextState == @states.stopped
+			if nextState == C.states.stopped
 				@stop()
 				return
 
@@ -84,19 +78,19 @@ window.hangboardTimer = {
 			@currentState = nextState
 
 			# if we're starting a new rep, increment the current rep count
-			if nextState == @states.hang
+			if nextState == C.states.hang
 				@currentRep++
 
 	getNextState: ->
 		console.log "getNextState", @currentRep, @reps
-		if @currentState == @states.stopped
-			return @states.get_ready
-		if @currentState == @states.get_ready
-			return @states.hang
-		if @currentState == @states.rest
-			return @states.hang
-		else if @currentState == @states.hang && @currentRep < @reps
-			return @states.rest
+		if @currentState == C.states.stopped
+			return C.states.get_ready
+		if @currentState == C.states.get_ready
+			return C.states.hang
+		if @currentState == C.states.rest
+			return C.states.hang
+		else if @currentState == C.states.hang && @currentRep < @reps
+			return C.states.rest
 		else
-			return @states.stopped
+			return C.states.stopped
 }

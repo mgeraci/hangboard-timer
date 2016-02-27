@@ -5,10 +5,10 @@ var sass = require('gulp-ruby-sass');
 
 var webpackConfig = require("./webpack.config.js");
 var cssRoot = "./css/";
-var cssFiles = cssRoot + "**/*.sass";
+var cssFiles = "**/*.sass";
 var cssEntry = cssRoot + "styles.sass";
 var jsRoot = "./js/";
-var jsFiles = jsRoot + "**/*.coffee";
+var jsFiles = "**/*.coffee";
 var jsEntry = jsRoot + "app.coffee";
 
 gulp.task("default", function() {

@@ -44,13 +44,13 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var $, C, Card;
+	var C, Card, Dom;
 
-	$ = __webpack_require__(1);
-
-	Card = __webpack_require__(2);
+	Card = __webpack_require__(1);
 
 	C = __webpack_require__(3);
+
+	Dom = __webpack_require__(4);
 
 	window.hangboardTimer = {
 	  reps: 2,
@@ -64,13 +64,14 @@
 	  currentRep: null,
 	  currentState: null,
 	  init: function() {
+	    Dom.init();
 	    this.currentState = C.states.stopped;
-	    $("#start").click((function(_this) {
+	    Dom.start.on("click tap", (function(_this) {
 	      return function() {
 	        return _this.start();
 	      };
 	    })(this));
-	    return $("#stop").click((function(_this) {
+	    return Dom.stop.on("click tap", (function(_this) {
 	      return function() {
 	        return _this.stop();
 	      };
@@ -80,6 +81,8 @@
 	    this.startTimestamp = Date.now();
 	    this.currentState = this.getNextState();
 	    this.currentRep = 0;
+	    Dom.stages.setup.removeClass(Dom.activeClass);
+	    Dom.stages.play.addClass(Dom.activeClass);
 	    return this.interval = setInterval((function(_this) {
 	      return function() {
 	        return _this.update();
@@ -91,6 +94,8 @@
 	    this.currentRep = null;
 	    this.currentState = C.states.stopped;
 	    this.card.destroy();
+	    Dom.stages.play.removeClass(Dom.activeClass);
+	    Dom.stages.setup.addClass(Dom.activeClass);
 	    if (this.interval != null) {
 	      return clearInterval(this.interval);
 	    }
@@ -150,6 +155,82 @@
 
 /***/ },
 /* 1 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var $, C, Card, Dom;
+
+	$ = __webpack_require__(2);
+
+	C = __webpack_require__(3);
+
+	Dom = __webpack_require__(4);
+
+	Card = Card = (function() {
+	  function Card() {
+	    this.el = $(this.template());
+	    Dom.stages.play.append(this.el);
+	    this.time = this.el.find(".card-time");
+	    this.status = this.el.find(".card-status");
+	    this.rep = this.el.find(".card-rep");
+	    if (typeof state !== "undefined" && state !== null) {
+	      this.update(state);
+	    }
+	  }
+
+	  Card.prototype.template = function() {
+	    return "<div class=\"card\">\n	<span class=\"card-time\"></span>\n	<span class=\"card-status\"></span>\n	<span class=\"card-rep\"></span>\n</div>";
+	  };
+
+	  Card.prototype.update = function(nextState) {
+	    var ref, ref1, ref2, text, time;
+	    if (nextState == null) {
+	      return;
+	    }
+	    if (((ref = this.state) != null ? ref.time : void 0) !== nextState.time && nextState.timeGoal) {
+	      time = this.formatCountdown(nextState.time, nextState.timeGoal);
+	      this.time.text(time);
+	    }
+	    if (((ref1 = this.state) != null ? ref1.status : void 0) !== nextState.status) {
+	      text = C.phrases[nextState.status];
+	      this.status.text(text);
+	    }
+	    if (((ref2 = this.state) != null ? ref2.rep : void 0) !== nextState.rep) {
+	      this.rep.text(nextState.rep);
+	    }
+	    return this.state = nextState;
+	  };
+
+	  Card.prototype.destroy = function() {
+	    return setTimeout((function(_this) {
+	      return function() {
+	        return _this.el.remove();
+	      };
+	    })(this), 1000);
+	  };
+
+	  Card.prototype.formatCountdown = function(current, goal) {
+	    var remaining;
+	    remaining = goal - current;
+	    if (remaining < 0) {
+	      remaining = 0;
+	    }
+	    remaining = "" + (remaining / 1000);
+	    if (remaining.indexOf(".") < 0) {
+	      remaining = remaining + ".000";
+	    }
+	    remaining = remaining.split(".").join(":");
+	    return remaining;
+	  };
+
+	  return Card;
+
+	})();
+
+	module.exports = Card;
+
+
+/***/ },
+/* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -9986,81 +10067,6 @@
 
 
 /***/ },
-/* 2 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var $, C, Card;
-
-	$ = __webpack_require__(1);
-
-	C = __webpack_require__(3);
-
-	Card = Card = (function() {
-	  function Card(timestamp, state) {
-	    this.id = timestamp;
-	    this.el = $(this.template());
-	    $("body").append(this.el);
-	    this.time = this.el.find(".card-time");
-	    this.status = this.el.find(".card-status");
-	    this.rep = this.el.find(".card-rep");
-	    if (state != null) {
-	      this.update(state);
-	    }
-	  }
-
-	  Card.prototype.update = function(nextState) {
-	    var ref, ref1, ref2, text, time;
-	    if (nextState == null) {
-	      return;
-	    }
-	    if (((ref = this.state) != null ? ref.time : void 0) !== nextState.time && nextState.timeGoal) {
-	      time = this.formatCountdown(nextState.time, nextState.timeGoal);
-	      this.time.text(time);
-	    }
-	    if (((ref1 = this.state) != null ? ref1.status : void 0) !== nextState.status) {
-	      text = C.phrases[nextState.status];
-	      this.status.text(text);
-	    }
-	    if (((ref2 = this.state) != null ? ref2.rep : void 0) !== nextState.rep) {
-	      this.rep.text(nextState.rep);
-	    }
-	    return this.state = nextState;
-	  };
-
-	  Card.prototype.destroy = function() {
-	    return setTimeout((function(_this) {
-	      return function() {
-	        return _this.el.remove();
-	      };
-	    })(this), 1000);
-	  };
-
-	  Card.prototype.template = function() {
-	    return "<div id=\"card\" class=\"card\">\n	<span class=\"card-time\"></span>\n	<span class=\"card-status\"></span>\n	<span class=\"card-rep\"></span>\n</div>";
-	  };
-
-	  Card.prototype.formatCountdown = function(current, goal) {
-	    var remaining;
-	    remaining = goal - current;
-	    if (remaining < 0) {
-	      remaining = 0;
-	    }
-	    remaining = "" + (remaining / 1000);
-	    if (remaining.indexOf(".") < 0) {
-	      remaining = remaining + ".000";
-	    }
-	    remaining = remaining.split(".").join(":");
-	    return remaining;
-	  };
-
-	  return Card;
-
-	})();
-
-	module.exports = Card;
-
-
-/***/ },
 /* 3 */
 /***/ function(module, exports) {
 
@@ -10076,6 +10082,28 @@
 	    stopped: "Stopped",
 	    hang: "Hang",
 	    rest: "Rest"
+	  }
+	};
+
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var $;
+
+	$ = __webpack_require__(2);
+
+	module.exports = {
+	  activeClass: "stage--active",
+	  init: function() {
+	    this.start = $("#start");
+	    this.stop = $("#stop");
+	    return this.stages = {
+	      all: $(".stage"),
+	      setup: $(".stage-setup"),
+	      play: $(".stage-play")
+	    };
 	  }
 	};
 

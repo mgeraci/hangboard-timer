@@ -1,6 +1,6 @@
-$ = require("jquery")
 Card = require("./card.coffee")
 C = require("./constants.coffee")
+Dom = require("./dom.coffee")
 
 window.hangboardTimer = {
 	# defaults for constants
@@ -20,13 +20,14 @@ window.hangboardTimer = {
 	currentState: null
 
 	init: ->
+		Dom.init()
 		@currentState = C.states.stopped
 
-		$("#start").click(=>
+		Dom.start.on("click tap", =>
 			@start()
 		)
 
-		$("#stop").click(=>
+		Dom.stop.on("click tap", =>
 			@stop()
 		)
 
@@ -34,6 +35,8 @@ window.hangboardTimer = {
 		@startTimestamp = Date.now()
 		@currentState = @getNextState()
 		@currentRep = 0
+		Dom.stages.setup.removeClass(Dom.activeClass)
+		Dom.stages.play.addClass(Dom.activeClass)
 
 		@interval = setInterval(=>
 			@update()
@@ -44,6 +47,8 @@ window.hangboardTimer = {
 		@currentRep = null
 		@currentState = C.states.stopped
 		@card.destroy()
+		Dom.stages.play.removeClass(Dom.activeClass)
+		Dom.stages.setup.addClass(Dom.activeClass)
 
 		if @interval?
 			clearInterval(@interval)

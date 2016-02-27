@@ -1,18 +1,26 @@
 $ = require("jquery")
 C = require("./constants.coffee")
+Dom = require("./dom.coffee")
 
 Card = class Card
-	constructor: (timestamp, state) ->
-		@id = timestamp
-
+	constructor: ->
 		@el = $(@template())
-		$("body").append(@el)
+		Dom.stages.play.append(@el)
 		@time = @el.find(".card-time")
 		@status = @el.find(".card-status")
 		@rep = @el.find(".card-rep")
 
 		if state?
 			@update(state)
+
+	template: ->
+		return """
+			<div class="card">
+				<span class="card-time"></span>
+				<span class="card-status"></span>
+				<span class="card-rep"></span>
+			</div>
+		"""
 
 	update: (nextState) ->
 		return if !nextState?
@@ -35,15 +43,6 @@ Card = class Card
 		setTimeout(=>
 			@el.remove()
 		, 1000)
-
-	template: ->
-		return """
-			<div id="card" class="card">
-				<span class="card-time"></span>
-				<span class="card-status"></span>
-				<span class="card-rep"></span>
-			</div>
-		"""
 
 	formatCountdown: (current, goal) ->
 		remaining = goal - current

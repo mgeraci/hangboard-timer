@@ -1,11 +1,27 @@
 <!DOCTYPE HTML>
 <html lang="en">
 	<head>
+		<title>Hangboard Timer</title>
+		<meta name="viewport" content="width=device-width, user-scalable=no" />
 		<link rel="stylesheet" href="./css/styles.css" />
 	</head>
 	<body>
-		<button id="start">start</button>
-		<button id="stop">stop</button>
+
+		<div class="stage stage-setup stage--active">
+			<h1>Hangboard Timer</h1>
+			<p>
+				Set your parameters and hit start to begin. You&rsquo;ll get a countdown
+				to prepare, and then it&rsquo;s off to the races. Tap anywhere to stop
+				once you&rsquo;ve begun.
+			</p>
+			<button id="start">start</button>
+		</div>
+
+		<div class="stage stage-play">
+			<button id="stop"></button>
+		</div>
+
+
 		<script type="text/javascript" src="./js/app.js"></script>
 		<script>
 			hangboardTimer.init();

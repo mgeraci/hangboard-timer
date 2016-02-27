@@ -1,18 +1,57 @@
+// global imports
+///////////////////////////////////////////////////////////////////////////////
+
 @import "bourbon/bourbon"
 @import "reset.css"
+
+
+// mixins
+///////////////////////////////////////////////////////////////////////////////
+
+@mixin bare-button
+  margin: 0
+  padding: 0
+  background: none
+  border: none
+  font-family: inherit
+  font-size: inherit
+  line-height: inherit
+  outline: none
+
+@mixin fullscreen
+  display: block
+  position: absolute
+  top: 0
+  left: 0
+  width: 100%
+  height: 100%
+  overflow: hidden
+
+
+// general styles
+///////////////////////////////////////////////////////////////////////////////
 
 *
   box-sizing: border-box
 
 body
+  @include fullscreen
   background: lightgray
+  font-family: Helvetica Nueue, Helvetica, Arial, sans-serif
   font-size: 40px
 
-#time
-  font-family: monospace
+// each state (setup form and active "play" state) gets its own wrapper, which
+// takes up the whole screen
+.stage
+  @include fullscreen
+  z-index: 1
 
-.card
-  margin-top: 40px
-  width: 200px
-  padding: 40px
-  border: 1px solid green
+  &--active
+    z-index: 2
+
+
+// include subfiles
+///////////////////////////////////////////////////////////////////////////////
+
+@import "stage_setup"
+@import "stage_play"

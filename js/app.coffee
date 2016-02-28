@@ -2,6 +2,7 @@ Card = require("./card.coffee")
 C = require("./constants.coffee")
 Dom = require("./dom.coffee")
 Form = require("./form.coffee")
+Sound = require("./sound.coffee")
 
 window.hangboardTimer = {
 	# defaults for constants
@@ -17,12 +18,22 @@ window.hangboardTimer = {
 	currentRep: null
 	currentState: C.states.stopped
 
+	playSound: true
+
 	init: ->
 		Dom.init()
 		Form.init()
 
+		if @playSound
+			Sound.init()
+
 		Dom.start.on("click tap", =>
 			@start()
+
+			# a sound trigger is required on the start button click, otherwise iOS
+			# blocks it as "autoplay" sound
+			if @playSound
+				Sound.playBeep()
 		)
 
 		Dom.stop.on("click tap", =>
@@ -82,6 +93,10 @@ window.hangboardTimer = {
 		nextState = @getNextState()
 
 		@card?.destroy()
+
+		# beep, unless it's just beginning
+		if @playSound && nextState != C.states.get_ready
+			Sound.playBeep()
 
 		# short circuit if we hit the end state
 		if nextState == C.states.stopped

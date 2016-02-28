@@ -44,7 +44,7 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var C, Card, Dom, Form;
+	var C, Card, Dom, Form, Sound;
 
 	Card = __webpack_require__(1);
 
@@ -53,6 +53,8 @@
 	Dom = __webpack_require__(4);
 
 	Form = __webpack_require__(5);
+
+	Sound = __webpack_require__(6);
 
 	window.hangboardTimer = {
 	  reps: C.defaults.reps,
@@ -64,12 +66,19 @@
 	  startTimestamp: null,
 	  currentRep: null,
 	  currentState: C.states.stopped,
+	  playSound: true,
 	  init: function() {
 	    Dom.init();
 	    Form.init();
+	    if (this.playSound) {
+	      Sound.init();
+	    }
 	    Dom.start.on("click tap", (function(_this) {
 	      return function() {
-	        return _this.start();
+	        _this.start();
+	        if (_this.playSound) {
+	          return Sound.playBeep();
+	        }
 	      };
 	    })(this));
 	    return Dom.stop.on("click tap", (function(_this) {
@@ -136,6 +145,9 @@
 	    nextState = this.getNextState();
 	    if ((ref = this.card) != null) {
 	      ref.destroy();
+	    }
+	    if (this.playSound && nextState !== C.states.get_ready) {
+	      Sound.playBeep();
 	    }
 	    if (nextState === C.states.stopped) {
 	      this.stop();
@@ -10191,6 +10203,149 @@
 	    return res;
 	  }
 	};
+
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Base64Binary;
+
+	Base64Binary = __webpack_require__(7);
+
+	module.exports = {
+	  init: function() {
+	    var arrayBuff;
+	    arrayBuff = Base64Binary.decodeArrayBuffer(this.beep64);
+	    if (typeof AudioContext !== "undefined" && AudioContext !== null) {
+	      this.beepContext = new AudioContext();
+	    } else if (typeof webkitAudioContext !== "undefined" && webkitAudioContext !== null) {
+	      this.beepContext = new webkitAudioContext();
+	    } else {
+	      return;
+	    }
+	    return this.beepContext.decodeAudioData(arrayBuff, (function(_this) {
+	      return function(audioData) {
+	        return _this.beepBuffer = audioData;
+	      };
+	    })(this));
+	  },
+	  playBeep: function() {
+	    var beep;
+	    if (this.beepBuffer == null) {
+	      return;
+	    }
+	    beep = this.beepContext.createBufferSource();
+	    beep.buffer = this.beepBuffer;
+	    beep.connect(this.beepContext.destination);
+	    if (typeof AudioContext !== "undefined" && AudioContext !== null) {
+	      return beep.start(0);
+	    } else if (typeof webkitAudioContext !== "undefined" && webkitAudioContext !== null) {
+	      return beep.noteOn(0);
+	    }
+	  },
+	  beep64: "SUQzBAAAAAAAF1RTU0UAAAANAAADTGF2ZjUyLjU0LjAA//tQxAAACGFJJLQSgBm0\nLO63GzACAFAHjGPGN/MhM53zvk/PQgcIogKEZTncQAMDuQiiYu5zoQjc5znfqQhM\n56HO9CN///nO//Oc587//yZCEac7oJnaAJFIBAIJBAIhAIxAIBIDAuBTj1StLqvf\n9LoFxJaPNCLkDIn/iUA+AUoAGMiyi8UgGzEGx8EUY8kTBoRci6X/yuRQuGhfTdKp\nJaKP9k3QLiBfTT///Q6DJl9MuGn///mglMiboIf8Z4G7Bki8v5YDb3f7AADEAAyR\nov/7UsQFgAtlUUW9CoABYKmoNPrReZIOtE2qYxcydBBBG6kD7mSLP//00SZLgrYB\ncBAsDgvcBkm4gACMBQKiUSobF50f//0WdqB7RUpN0WR/+f///////+p0iKGpAQFx\n+F7SZJ1khvSbZwgAVgAQHH3L4N43rRZ5ZosySU6VCpd1sr//1pGJDgvyBhIJgceq\nAHPDBfUXEQUnjVL//+yRmigpbMpaezJuvuu86cq///////+Xx5NR/ApjAaNlypUF\nCNtNgACgAA7tucj6RbutA8cR//tSxAmADDlRO6XWq8F2qif0+tF5TWy0kKknUyX+\n+upajMwJsYwMhgIDwKA8D+qmB0xBQHCijuJ0+ef/9f93Mj6BxI+ikbpTU//8tN//\n2/////WgLWMqgRcDBRPAkwxoG7GvrDklzdqAAjABH/FLRd2timEzVbqemta0loou\ngtCtv/1oF8mCBiAgAoLAwCHAN1fEDeixKBNmCal///1N1pupBLSMrVKq084Zu/Zb\nf/////+oapDy8QYDBHgVJDybMsoNyWSOgACgADK5m2zVxvn/+1LEB4ALrU9BtLqA\nCYaob78lMgJu+rWfW1kFOpR7//Wy00yGC5AxoFjIGCgOBhLtAYPGQGIAIFog4Rxk\nXSZTP//2XorXZjdk6a3/+f////////TI8ZsSmDbgABYAsTxcZkAGpuYQwOoQgEQA\nAAdhQAAIF8i4mBeRgWMGwYlwPMAVBFHACWDYejgFfA/SA0GRUl2fVRR9aZJh8pP9\nT/TNEGf/+F9wswOskw9ALCA5RFSSWv+mm6CDJ/9FH//////9ieOfkhgABPYwkM5C\n1z3Mpf/7UsQGA8qskxBdgYAAAAA0gAAABHbAtaz//lTU1NTEwE1UBAVOrxmb9m6o\nCAmFAQFYGAgJdm9VU6qrsBASiIOlQVHgq4RHlA0sFR4KuUe/9TxL+WPCWCp3/BVR\n5QNVTEFNRTMuOTdVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV\nVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV\nVVVVVVVVVVVVVVVVVVVVVVVVVVVV//tSxDkDwAABpAAAACAAADSAAAAEVVVVVVVV\nVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV\nVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV\nVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV\nVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVU="
+	};
+
+
+/***/ },
+/* 7 */
+/***/ function(module, exports) {
+
+	/*
+	Copyright (c) 2011, Daniel Guerrero
+	All rights reserved.
+
+	Redistribution and use in source and binary forms, with or without
+	modification, are permitted provided that the following conditions are met:
+	    * Redistributions of source code must retain the above copyright
+	      notice, this list of conditions and the following disclaimer.
+	    * Redistributions in binary form must reproduce the above copyright
+	      notice, this list of conditions and the following disclaimer in the
+	      documentation and/or other materials provided with the distribution.
+
+	THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+	ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+	WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+	DISCLAIMED. IN NO EVENT SHALL DANIEL GUERRERO BE LIABLE FOR ANY
+	DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+	(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+	LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+	ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+	(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+	SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+	 */
+
+	/**
+	 * Uses the new array typed in javascript to binary base64 encode/decode
+	 * at the moment just decodes a binary base64 encoded
+	 * into either an ArrayBuffer (decodeArrayBuffer)
+	 * or into an Uint8Array (decode)
+	 *
+	 * References:
+	 * https://developer.mozilla.org/en/JavaScript_typed_arrays/ArrayBuffer
+	 * https://developer.mozilla.org/en/JavaScript_typed_arrays/Uint8Array
+	 */
+
+	module.exports = {
+		_keyStr : "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
+
+		/* will return a  Uint8Array type */
+		decodeArrayBuffer: function(input) {
+			var bytes = (input.length/4) * 3;
+			var ab = new ArrayBuffer(bytes);
+			this.decode(input, ab);
+
+			return ab;
+		},
+
+		removePaddingChars: function(input){
+			var lkey = this._keyStr.indexOf(input.charAt(input.length - 1));
+			if(lkey == 64){
+				return input.substring(0,input.length - 1);
+			}
+			return input;
+		},
+
+		decode: function (input, arrayBuffer) {
+			//get last chars to see if are valid
+			input = this.removePaddingChars(input);
+			input = this.removePaddingChars(input);
+
+			var bytes = parseInt((input.length / 4) * 3, 10);
+
+			var uarray;
+			var chr1, chr2, chr3;
+			var enc1, enc2, enc3, enc4;
+			var i = 0;
+			var j = 0;
+
+			if (arrayBuffer)
+				uarray = new Uint8Array(arrayBuffer);
+			else
+				uarray = new Uint8Array(bytes);
+
+			input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
+
+			for (i=0; i<bytes; i+=3) {
+				//get the 3 octects in 4 ascii chars
+				enc1 = this._keyStr.indexOf(input.charAt(j++));
+				enc2 = this._keyStr.indexOf(input.charAt(j++));
+				enc3 = this._keyStr.indexOf(input.charAt(j++));
+				enc4 = this._keyStr.indexOf(input.charAt(j++));
+
+				chr1 = (enc1 << 2) | (enc2 >> 4);
+				chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
+				chr3 = ((enc3 & 3) << 6) | enc4;
+
+				uarray[i] = chr1;
+				if (enc3 != 64) uarray[i+1] = chr2;
+				if (enc4 != 64) uarray[i+2] = chr3;
+			}
+
+			return uarray;
+		}
+	}
 
 
 /***/ }

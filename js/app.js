@@ -10118,10 +10118,10 @@
 	    rest: "Rest"
 	  },
 	  defaults: {
-	    hang: 2000,
-	    rest: 1000,
+	    hang: 10000,
+	    rest: 5000,
 	    get_ready: 5000,
-	    reps: 2
+	    reps: 6
 	  },
 	  intervalTime: 50
 	};

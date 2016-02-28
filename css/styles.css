@@ -261,9 +261,9 @@ body {
     -o-transform: rotate(5deg) translateY(130%);
     transform: rotate(5deg) translateY(130%); }
   .card--hang {
-    background: #ffc952; }
-  .card--rest {
     background: #ff7473; }
+  .card--rest {
+    background: #ffc952; }
   .card-status, .card-time, .card-rep {
     display: block;
     width: 100%;
@@ -288,5 +288,5 @@ body {
     text-align: right; }
   .card .colon {
     position: relative;
-    bottom: 7px;
+    bottom: 10px;
     font-size: 70%; }

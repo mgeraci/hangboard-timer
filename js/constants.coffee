@@ -22,4 +22,8 @@ module.exports = {
 
 	# how frequently the app should update
 	intervalTime: 50
+
+	formKeys: ["hang", "rest", "reps"]
+
+	localstorageKey: "formValues"
 }

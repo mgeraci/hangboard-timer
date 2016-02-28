@@ -54,7 +54,7 @@
 
 	Form = __webpack_require__(5);
 
-	Sound = __webpack_require__(6);
+	Sound = __webpack_require__(7);
 
 	window.hangboardTimer = {
 	  reps: C.defaults.reps,
@@ -10123,7 +10123,9 @@
 	    get_ready: 5000,
 	    reps: 6
 	  },
-	  intervalTime: 50
+	  intervalTime: 50,
+	  formKeys: ["hang", "rest", "reps"],
+	  localstorageKey: "formValues"
 	};
 
 
@@ -10153,20 +10155,47 @@
 /* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var $, C;
+	var $, C, localstorage;
 
 	$ = __webpack_require__(2);
 
 	C = __webpack_require__(3);
 
+	localstorage = __webpack_require__(6);
+
 	module.exports = {
 	  init: function() {
-	    this.hang = $("input[name=hang]");
-	    this.rest = $("input[name=rest]");
-	    this.reps = $("input[name=reps]");
-	    this.hang.val(C.defaults[C.states.hang] / 1000);
-	    this.rest.val(C.defaults[C.states.rest] / 1000);
-	    this.reps.val(C.defaults.reps);
+	    var formKey, i, len, ref;
+	    localstorage.init();
+	    this.dom = {};
+	    ref = C.formKeys;
+	    for (i = 0, len = ref.length; i < len; i++) {
+	      formKey = ref[i];
+	      this.dom[formKey] = $("input[name=" + formKey + "]");
+	    }
+	    this.setInitialValues();
+	    return this.listen();
+	  },
+	  setInitialValues: function() {
+	    var bundle, defaultValue, formKey, i, len, ref, results;
+	    bundle = localstorage.get();
+	    ref = C.formKeys;
+	    results = [];
+	    for (i = 0, len = ref.length; i < len; i++) {
+	      formKey = ref[i];
+	      if ((bundle != null ? bundle[formKey] : void 0) != null) {
+	        defaultValue = bundle[formKey];
+	      } else {
+	        defaultValue = C.defaults[formKey];
+	      }
+	      if (formKey !== "reps") {
+	        defaultValue = defaultValue / 1000;
+	      }
+	      results.push(this.dom[formKey].val(defaultValue));
+	    }
+	    return results;
+	  },
+	  listen: function() {
 	    return $(".taptime-button").on("click tap", (function(_this) {
 	      return function(e) {
 	        var button, direction, field;
@@ -10192,14 +10221,22 @@
 	    if (value < 1) {
 	      value = 1;
 	    }
-	    return field.val(value);
+	    field.val(value);
+	    return localstorage.set(this.getValues());
 	  },
 	  getValues: function() {
-	    var res;
+	    var formKey, i, len, ref, res, value;
 	    res = {};
-	    res[C.states.hang] = parseInt(this.hang.val(), 10) * 1000;
-	    res[C.states.rest] = parseInt(this.rest.val(), 10) * 1000;
-	    res.reps = parseInt(this.reps.val(), 10);
+	    ref = C.formKeys;
+	    for (i = 0, len = ref.length; i < len; i++) {
+	      formKey = ref[i];
+	      value = this.dom[formKey].val();
+	      value = parseInt(value, 10);
+	      if (formKey !== "reps") {
+	        value = value * 1000;
+	      }
+	      res[formKey] = value;
+	    }
 	    return res;
 	  }
 	};
@@ -10209,9 +10246,49 @@
 /* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var C;
+
+	C = __webpack_require__(3);
+
+	module.exports = {
+	  init: function() {
+	    var d, error, result;
+	    this.storage = false;
+	    try {
+	      d = new Date;
+	      window.localStorage.setItem(d, d);
+	      result = window.localStorage.getItem(d) === d;
+	      window.localStorage.removeItem(d);
+	      return this.storage = window.localStorage;
+	    } catch (error) {
+
+	    }
+	  },
+	  set: function(bundle) {
+	    if (!this.storage) {
+	      return;
+	    }
+	    return this.storage.setItem(C.localstorageKey, JSON.stringify(bundle));
+	  },
+	  get: function() {
+	    var bundle;
+	    if (!this.storage) {
+	      return false;
+	    }
+	    bundle = this.storage.getItem(C.localstorageKey);
+	    bundle = JSON.parse(bundle);
+	    return bundle;
+	  }
+	};
+
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var Base64Binary;
 
-	Base64Binary = __webpack_require__(7);
+	Base64Binary = __webpack_require__(8);
 
 	module.exports = {
 	  init: function() {
@@ -10249,7 +10326,7 @@
 
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports) {
 
 	/*

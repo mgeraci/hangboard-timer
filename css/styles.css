@@ -15,7 +15,7 @@ body {
   font-size: 40px;
   color: #34314c; }
 
-@media (min-width: 400px) {
+@media (min-width: 800px) {
   .stages {
     position: absolute;
     overflow: hidden;
@@ -37,7 +37,7 @@ body {
       left: 0; }
     .stages #start {
       position: absolute; } }
-@media (min-height: 700px) {
+@media (min-height: 800px) {
   .stages {
     position: absolute;
     overflow: hidden;

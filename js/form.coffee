@@ -1,4 +1,4 @@
-$ = require("jquery")
+$ = require("npm-zepto")
 C = require("./constants.coffee")
 localstorage = require("./localstorage.coffee")
 

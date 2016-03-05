@@ -4,6 +4,8 @@ Dom = require("./dom.coffee")
 Form = require("./form.coffee")
 Sound = require("./sound.coffee")
 
+FastClick = require("fastclick")
+
 window.hangboardTimer = {
 	# defaults for constants
 	reps: C.defaults.reps
@@ -23,6 +25,7 @@ window.hangboardTimer = {
 	init: ->
 		Dom.init()
 		Form.init()
+		FastClick.attach(document.body)
 
 		if @playSound
 			Sound.init()

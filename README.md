@@ -9,3 +9,6 @@ It's written in coffeescript and sass, and compiled using gulp and webkit.
 
 To get this running locally, clone the repo, run `npm install`, and then `gulp`
 to start watching css and js for updates.
+
+Since this proejct is just static files, there's no server required. Just open
+index.html!

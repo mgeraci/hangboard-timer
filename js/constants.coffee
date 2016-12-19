@@ -16,11 +16,16 @@ module.exports = {
 	}
 
 	defaults: {
+		# in milliseconds
 		hang: 10000
 		rest: 5000
 		get_ready: 5000
+
+		# no unit
 		reps: 6
-		recover: 3 * 60 * 1000 # 3 minutes
+
+		# in minutes
+		recover: 3
 	}
 
 	# how frequently the app should update

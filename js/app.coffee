@@ -13,6 +13,7 @@ window.hangboardTimer = {
 		hang: C.defaults[C.states.hang]
 		rest: C.defaults[C.states.rest]
 		get_ready: C.defaults[C.states.get_ready]
+		recover: C.defaults[C.states.recover]
 	}
 
 	# vars used on a per-exercise basis
@@ -48,6 +49,7 @@ window.hangboardTimer = {
 		formValues = Form.getValues()
 		@times[C.states.hang] = formValues[C.states.hang]
 		@times[C.states.rest] = formValues[C.states.rest]
+		@times[C.states.recover] = formValues[C.states.recover]
 		@reps = formValues.reps
 
 		@startTimestamp = Date.now()
@@ -123,8 +125,11 @@ window.hangboardTimer = {
 			nextState = C.states.hang
 		else if @currentState == C.states.rest
 			nextState = C.states.hang
-		else if @currentState == C.states.hang && @currentRep < @reps
-			nextState = C.states.rest
+		else if @currentState == C.states.hang
+			if @currentRep < @reps
+			  nextState = C.states.rest
+			else
+			  nextState = C.states.recover
 		else
 			nextState = C.states.stopped
 

@@ -4,6 +4,7 @@ module.exports = {
 		stopped: "stopped"
 		hang: "hang"
 		rest: "rest"
+		recover: "recover"
 	}
 
 	phrases: {
@@ -11,6 +12,7 @@ module.exports = {
 		stopped: "Stopped"
 		hang: "Hang"
 		rest: "Rest"
+		recover: "Recover"
 	}
 
 	defaults: {
@@ -18,12 +20,13 @@ module.exports = {
 		rest: 5000
 		get_ready: 5000
 		reps: 6
+		recover: 3 * 60 * 1000 # 3 minutes
 	}
 
 	# how frequently the app should update
 	intervalTime: 50
 
-	formKeys: ["hang", "rest", "reps"]
+	formKeys: ["hang", "rest", "reps", "recover"]
 
 	localstorageKey: "formValues"
 }

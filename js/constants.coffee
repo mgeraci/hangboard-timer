@@ -24,8 +24,8 @@ module.exports = {
 		# no unit
 		reps: 6
 
-		# in minutes
-		recover: 3
+		# in thousandths of a minute
+		recover: 3 * 1000
 	}
 
 	# how frequently the app should update

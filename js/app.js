@@ -1896,7 +1896,7 @@
 	    rest: 5000,
 	    get_ready: 5000,
 	    reps: 6,
-	    recover: 3
+	    recover: 3 * 1000
 	  },
 	  intervalTime: 50,
 	  formKeys: ["hang", "rest", "reps", "recover"],

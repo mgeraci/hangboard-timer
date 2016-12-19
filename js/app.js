@@ -63,7 +63,8 @@
 	  times: {
 	    hang: C.defaults[C.states.hang],
 	    rest: C.defaults[C.states.rest],
-	    get_ready: C.defaults[C.states.get_ready]
+	    get_ready: C.defaults[C.states.get_ready],
+	    recover: C.defaults[C.states.recover]
 	  },
 	  startTimestamp: null,
 	  currentRep: null,
@@ -95,6 +96,7 @@
 	    formValues = Form.getValues();
 	    this.times[C.states.hang] = formValues[C.states.hang];
 	    this.times[C.states.rest] = formValues[C.states.rest];
+	    this.times[C.states.recover] = formValues[C.states.recover];
 	    this.reps = formValues.reps;
 	    this.startTimestamp = Date.now();
 	    this.triggerNextState();
@@ -173,8 +175,12 @@
 	      nextState = C.states.hang;
 	    } else if (this.currentState === C.states.rest) {
 	      nextState = C.states.hang;
-	    } else if (this.currentState === C.states.hang && this.currentRep < this.reps) {
-	      nextState = C.states.rest;
+	    } else if (this.currentState === C.states.hang) {
+	      if (this.currentRep < this.reps) {
+	        nextState = C.states.rest;
+	      } else {
+	        nextState = C.states.recover;
+	      }
 	    } else {
 	      nextState = C.states.stopped;
 	    }
@@ -1875,22 +1881,25 @@
 	    get_ready: "get_ready",
 	    stopped: "stopped",
 	    hang: "hang",
-	    rest: "rest"
+	    rest: "rest",
+	    recover: "recover"
 	  },
 	  phrases: {
 	    get_ready: "Get ready...",
 	    stopped: "Stopped",
 	    hang: "Hang",
-	    rest: "Rest"
+	    rest: "Rest",
+	    recover: "Recover"
 	  },
 	  defaults: {
 	    hang: 10000,
 	    rest: 5000,
 	    get_ready: 5000,
-	    reps: 6
+	    reps: 6,
+	    recover: 3 * 60 * 1000
 	  },
 	  intervalTime: 50,
-	  formKeys: ["hang", "rest", "reps"],
+	  formKeys: ["hang", "rest", "reps", "recover"],
 	  localstorageKey: "formValues"
 	};
 

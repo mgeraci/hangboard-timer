@@ -2018,7 +2018,7 @@
 
 	module.exports = {
 	  init: function() {
-	    var d, error, result;
+	    var d, result;
 	    this.storage = false;
 	    try {
 	      d = new Date;

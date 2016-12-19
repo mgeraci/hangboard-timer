@@ -63,7 +63,9 @@ module.exports = {
 			value = @dom[formKey].val()
 			value = parseInt(value, 10)
 
-			if formKey != "reps"
+			if formKey == "recover"
+				value = value * 60 * 1000
+			else if formKey != "reps"
 				value = value * 1000
 
 			res[formKey] = value

@@ -1896,7 +1896,7 @@
 	    rest: 5000,
 	    get_ready: 5000,
 	    reps: 6,
-	    recover: 3 * 60 * 1000
+	    recover: 3
 	  },
 	  intervalTime: 50,
 	  formKeys: ["hang", "rest", "reps", "recover"],
@@ -2007,7 +2007,9 @@
 	      formKey = ref[i];
 	      value = this.dom[formKey].val();
 	      value = parseInt(value, 10);
-	      if (formKey !== "reps") {
+	      if (formKey === "recover") {
+	        value = value * 60 * 1000;
+	      } else if (formKey !== "reps") {
 	        value = value * 1000;
 	      }
 	      res[formKey] = value;

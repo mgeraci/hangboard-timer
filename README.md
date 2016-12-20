@@ -12,4 +12,4 @@ to start watching css and js for updates. This assumes that you have gulp
 installed globally.
 
 Since this project is just static files, there's no server required. Just open
-index.html!
+`index.html`!

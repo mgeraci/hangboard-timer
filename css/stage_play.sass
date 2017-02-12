@@ -39,6 +39,11 @@ $angle-count: 10
   &--rest
     background: $orange
 
+  // no point in showing the rep count during the rest phase...
+  &--recover
+    .card-rep
+      display: none
+
   &-status,
   &-time,
   &-rep

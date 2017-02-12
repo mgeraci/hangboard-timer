@@ -264,6 +264,8 @@ body {
     background: #ff7473; }
   .card--rest {
     background: #ffc952; }
+  .card--recover .card-rep {
+    display: none; }
   .card-status, .card-time, .card-rep {
     display: block;
     width: 100%;

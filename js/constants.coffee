@@ -25,7 +25,7 @@ module.exports = {
 		reps: 6
 
 		# in thousandths of a minute
-		recover: 3 * 1000
+		recover: 3
 	}
 
 	# how frequently the app should update
@@ -34,4 +34,9 @@ module.exports = {
 	formKeys: ["hang", "rest", "reps", "recover"]
 
 	localstorageKey: "formValues"
+
+	# most +/- tap buttons shouldn't go to 0, but recovery should
+	tapTimeZeroAllowed: {
+		recover: 1
+	}
 }

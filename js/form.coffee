@@ -23,7 +23,9 @@ module.exports = {
 			else
 				defaultValue = C.defaults[formKey]
 
-			if formKey != "reps"
+			if formKey == "recover"
+				defaultValue = defaultValue / 1000 / 60
+			else if formKey != "reps"
 				defaultValue = defaultValue / 1000
 
 			@dom[formKey].val(defaultValue)
@@ -49,8 +51,12 @@ module.exports = {
 		else
 			value--
 
-		if value < 1
-			value = 1
+		if C.tapTimeZeroAllowed[field.attr("name")]
+			if value < 0
+				value = 0
+		else
+			if value < 1
+				value = 1
 
 		field.val(value)
 

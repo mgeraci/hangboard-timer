@@ -75,10 +75,12 @@ window.hangboardTimer = {
 
 	update: ->
 		now = Date.now()
+
 		if @startTimestamp?
 			elaspedTime = now - @startTimestamp
 		else
 			elaspedTime = 0
+
 		stateDuration = @times[@currentState]
 
 		if @currentRep? && @currentRep > 0

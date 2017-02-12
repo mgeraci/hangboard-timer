@@ -24,6 +24,11 @@ module.exports = {
 		return false if !@storage
 
 		bundle = @storage.getItem(C.localstorageKey)
+
+		if !bundle
+			return false
+
 		bundle = JSON.parse(bundle)
+
 		return bundle
 }

@@ -1896,11 +1896,14 @@
 	    rest: 5000,
 	    get_ready: 5000,
 	    reps: 6,
-	    recover: 3 * 1000
+	    recover: 3
 	  },
 	  intervalTime: 50,
 	  formKeys: ["hang", "rest", "reps", "recover"],
-	  localstorageKey: "formValues"
+	  localstorageKey: "formValues",
+	  tapTimeZeroAllowed: {
+	    recover: 1
+	  }
 	};
 
 
@@ -1963,7 +1966,9 @@
 	      } else {
 	        defaultValue = C.defaults[formKey];
 	      }
-	      if (formKey !== "reps") {
+	      if (formKey === "recover") {
+	        defaultValue = defaultValue / 1000 / 60;
+	      } else if (formKey !== "reps") {
 	        defaultValue = defaultValue / 1000;
 	      }
 	      results.push(this.dom[formKey].val(defaultValue));
@@ -1993,8 +1998,14 @@
 	    } else {
 	      value--;
 	    }
-	    if (value < 1) {
-	      value = 1;
+	    if (C.tapTimeZeroAllowed[field.attr("name")]) {
+	      if (value < 0) {
+	        value = 0;
+	      }
+	    } else {
+	      if (value < 1) {
+	        value = 1;
+	      }
 	    }
 	    field.val(value);
 	    return localstorage.set(this.getValues());
@@ -2053,6 +2064,9 @@
 	      return false;
 	    }
 	    bundle = this.storage.getItem(C.localstorageKey);
+	    if (!bundle) {
+	      return false;
+	    }
 	    bundle = JSON.parse(bundle);
 	    return bundle;
 	  }

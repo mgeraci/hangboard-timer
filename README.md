@@ -11,5 +11,5 @@ To get this running locally, clone the repo, run `npm install`, and then `gulp`
 to start watching css and js for updates. This assumes that you have gulp
 installed globally.
 
-Since this proejct is just static files, there's no server required. Just open
-index.html!
+Since this project is just static files, there's no server required. Just open
+`index.html`!

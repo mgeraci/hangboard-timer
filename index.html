@@ -21,7 +21,7 @@
 							Hang time
 							<span class="label-help">(seconds)</span>
 							<div class="taptime">
-								<input class="taptime-input" name="hang" type="text" />
+								<input class="taptime-input" name="hang" type="number" min="1" tabindex="1" />
 								<button class="taptime-button taptime-button--decrement">
 									<span class="taptime-button-text">-</span>
 								</button>
@@ -35,7 +35,7 @@
 							Rest time
 							<span class="label-help">(seconds)</span>
 							<div class="taptime">
-								<input class="taptime-input" name="rest" type="text" />
+								<input class="taptime-input" name="rest" type="number" min="1" tabindex="2" />
 								<button class="taptime-button taptime-button--decrement">
 									<span class="taptime-button-text">-</span>
 								</button>
@@ -48,7 +48,7 @@
 						<fieldset>
 							Reps
 							<div class="taptime">
-								<input class="taptime-input" name="reps" type="text" />
+								<input class="taptime-input" name="reps" type="number" min="1" tabindex="3" />
 								<button class="taptime-button taptime-button--decrement">
 									<span class="taptime-button-text">-</span>
 								</button>
@@ -62,7 +62,7 @@
 							Recovery time
 							<span class="label-help">(minutes, optional)</span>
 							<div class="taptime">
-								<input class="taptime-input" name="recover" type="text" />
+								<input class="taptime-input" name="recover" type="number" min="1" tabindex="4" />
 								<button class="taptime-button taptime-button--decrement">
 									<span class="taptime-button-text">-</span>
 								</button>
@@ -73,7 +73,7 @@
 						</fieldset>
 					</div>
 
-					<button id="start">start</button>
+					<button id="start" tabindex="5">start</button>
 				</div>
 
 				<div class="stage stage-play">

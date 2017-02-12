@@ -153,6 +153,8 @@
 	    }
 	    if (this.playSound && nextState === C.states.stopped) {
 	      Sound.playEndBeep();
+	    } else if (this.playSound && nextState === C.states.recover) {
+	      Sound.playEndBeep();
 	    } else if (this.playSound && nextState !== C.states.get_ready) {
 	      Sound.playBeep();
 	    }

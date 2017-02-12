@@ -104,6 +104,8 @@ window.hangboardTimer = {
 		# beep, unless it's just beginning
 		if @playSound && nextState == C.states.stopped
 			Sound.playEndBeep()
+		else if @playSound && nextState == C.states.recover
+			Sound.playEndBeep()
 		else if @playSound && nextState != C.states.get_ready
 			Sound.playBeep()
 

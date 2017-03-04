@@ -253,7 +253,7 @@
 	  };
 
 	  Card.prototype.formatCountdown = function(current, goal) {
-	    var time;
+	    var minutes, seconds, time;
 	    time = goal - current;
 	    if (time < 0) {
 	      time = 0;
@@ -263,6 +263,14 @@
 	      time = time + ".000";
 	    }
 	    time = time.split(".");
+	    if (time[0] > 59) {
+	      minutes = Math.floor(time[0] / 60);
+	      seconds = time[0] % 60;
+	      if (seconds < 10) {
+	        seconds = "0" + seconds;
+	      }
+	      return minutes + "<span class='colon'>:</span>" + seconds;
+	    }
 	    if (time[0] > 9) {
 	      return time[0];
 	    }

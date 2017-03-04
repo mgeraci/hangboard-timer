@@ -65,6 +65,16 @@ Card = class Card
 
 		time = time.split(".")
 
+		# if we're over a minute, format into minute and second counts
+		if time[0] > 59
+			minutes = Math.floor(time[0] / 60)
+			seconds = time[0] % 60
+
+			if seconds < 10
+				seconds = "0#{seconds}"
+
+			return "#{minutes}<span class='colon'>:</span>#{seconds}"
+
 		# if we're over a single digit time, don't show the milliseconds
 		if time[0] > 9
 			return time[0]

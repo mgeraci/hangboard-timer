@@ -1969,7 +1969,7 @@
 	        defaultValue = C.defaults[formKey];
 	      }
 	      if (formKey === "recover") {
-	        defaultValue = defaultValue / 1000 / 60;
+	        defaultValue = Math.round(defaultValue / 1000 / 60);
 	      } else if (formKey !== "reps") {
 	        defaultValue = defaultValue / 1000;
 	      }

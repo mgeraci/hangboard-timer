@@ -84,13 +84,11 @@ body {
   .stage-setup-form {
     width: 100%;
     padding: 6%; }
-  .stage-setup-title {
-    width: 100%;
-    text-align: center;
+  .stage-setup h1 {
     font-size: 36px;
-    letter-spacing: 1px;
-    color: #ff7473; }
-  .stage-setup-title,
+    font-weight: 100;
+    letter-spacing: 1px; }
+  .stage-setup h1,
   .stage-setup fieldset {
     margin-bottom: 18px; }
   .stage-setup fieldset {

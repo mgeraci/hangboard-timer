@@ -51,24 +51,28 @@ Card = class Card
 		, 1000)
 
 	formatCountdown: (current, goal) ->
-		remaining = goal - current
+		time = goal - current
 
 		# keep in bounds
-		if remaining < 0
-			remaining = 0
+		if time < 0
+			time = 0
 
-		remaining = "#{remaining / 1000}"
+		time = "#{time / 1000}"
 
-		# make zero counts look good by adding more zeros at the end
-		if remaining.indexOf(".") < 0
-			remaining = "#{remaining}.000"
+		# make counts that divide evenly look good by adding more zeros at the end
+		if time.indexOf(".") < 0
+			time = "#{time}.000"
 
-		remaining = remaining.split(".")
+		time = time.split(".")
+
+		# if we're over a single digit time, don't show the milliseconds
+		if time[0] > 9
+			return time[0]
 
 		# pad the zeros so that the number doesn't jump around as much
-		while remaining[1].length < 3
-			remaining[1] = "#{remaining[1]}0"
+		while time[1].length < 3
+			time[1] = "#{time[1]}0"
 
-		return remaining.join("<span class='colon'>:</span>")
+		return time.join("<span class='colon'>:</span>")
 
 module.exports = Card

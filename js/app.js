@@ -253,20 +253,23 @@
 	  };
 
 	  Card.prototype.formatCountdown = function(current, goal) {
-	    var remaining;
-	    remaining = goal - current;
-	    if (remaining < 0) {
-	      remaining = 0;
+	    var time;
+	    time = goal - current;
+	    if (time < 0) {
+	      time = 0;
 	    }
-	    remaining = "" + (remaining / 1000);
-	    if (remaining.indexOf(".") < 0) {
-	      remaining = remaining + ".000";
+	    time = "" + (time / 1000);
+	    if (time.indexOf(".") < 0) {
+	      time = time + ".000";
 	    }
-	    remaining = remaining.split(".");
-	    while (remaining[1].length < 3) {
-	      remaining[1] = remaining[1] + "0";
+	    time = time.split(".");
+	    if (time[0] > 9) {
+	      return time[0];
 	    }
-	    return remaining.join("<span class='colon'>:</span>");
+	    while (time[1].length < 3) {
+	      time[1] = time[1] + "0";
+	    }
+	    return time.join("<span class='colon'>:</span>");
 	  };
 
 	  return Card;
